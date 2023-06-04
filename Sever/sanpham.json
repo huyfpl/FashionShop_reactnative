@@ -1,0 +1,109 @@
+{
+    "products": [
+      {
+        "idSP": "SP001",
+        "tenSP": "Áo thun nam",
+        "anhSP": "https://iili.io/HgVGxSf.jpg",
+        "giaNhap": 150000,
+        "giaBan": 250000,
+        "tonKho": 100
+      },
+      {
+        "idSP": "SP002",
+        "tenSP": "Quần jean nữ",
+        "anhSP": "https://iili.io/HgVGxSf.jpg",
+        "giaNhap": 200000,
+        "giaBan": 350000,
+        "tonKho": 50
+      },
+      {
+        "idSP": "SP003",
+        "tenSP": "Giày thể thao unisex",
+        "anhSP": "https://iili.io/HgVGxSf.jpg",
+        "giaNhap": 300000,
+        "giaBan": 450000,
+        "tonKho": 75
+      },
+        {
+        "idSP": "SP004",
+        "tenSP": "Áo thun nam",
+        "anhSP": "https://iili.io/HgVGxSf.jpg",
+        "giaNhap": 150000,
+        "giaBan": 250000,
+        "tonKho": 100
+      },
+      {
+        "idSP": "SP005",
+        "tenSP": "Quần jean nữ",
+        "anhSP": "https://iili.io/HgVGxSf.jpg",
+        "giaNhap": 200000,
+        "giaBan": 350000,
+        "tonKho": 50
+      },
+      {
+        "idSP": "SP006",
+        "tenSP": "Giày thể thao unisex",
+        "anhSP": "https://iili.io/HgVGxSf.jpg",
+        "giaNhap": 300000,
+        "giaBan": 450000,
+        "tonKho": 75
+      },
+        {
+        "idSP": "SP007",
+        "tenSP": "Áo thun nam",
+        "anhSP": "https://iili.io/HgVGxSf.jpg",
+        "giaNhap": 150000,
+        "giaBan": 250000,
+        "tonKho": 100
+      },
+      {
+        "idSP": "SP008",
+        "tenSP": "Quần jean nữ",
+        "anhSP": "https://iili.io/HgVGxSf.jpg",
+        "giaNhap": 200000,
+        "giaBan": 350000,
+        "tonKho": 50
+      },
+      {
+        "idSP": "SP009",
+        "tenSP": "Giày thể thao unisex",
+        "anhSP": "https://iili.io/HgVGxSf.jpg",
+        "giaNhap": 300000,
+        "giaBan": 450000,
+        "tonKho": 75
+      },
+        {
+        "idSP": "SP010",
+        "tenSP": "Áo thun nam",
+        "anhSP": "https://iili.io/HgVGxSf.jpg",
+        "giaNhap": 150000,
+        "giaBan": 250000,
+        "tonKho": 100
+      },
+      {
+        "idSP": "SP011",
+        "tenSP": "Quần jean nữ",
+        "anhSP": "https://iili.io/HgVGxSf.jpg",
+        "giaNhap": 200000,
+        "giaBan": 350000,
+        "tonKho": 50
+      },
+      {
+        "idSP": "SP012",
+        "tenSP": "Giày thể thao unisex",
+        "anhSP": "https://iili.io/HgVGxSf.jpg",
+        "giaNhap": 300000,
+        "giaBan": 450000,
+        "tonKho": 75
+      },
+      {
+        "idSP": "duc test lan 4",
+        "tenSP": "duc test lan 4",
+        "anhSP": "https://iili.io/HgVGxSf.jpg",
+        "giaNhap": 0,
+        "giaBan": 0,
+        "tonKho": 0
+      }
+    ]
+  }
+  
