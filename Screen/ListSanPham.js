@@ -30,7 +30,7 @@ export default class ListSanPham extends React.Component {
         }, 3000);
     }
     async getProducts() {
-        const url = 'https://huyfpl.github.io/shopquanao_nhom8_agile/data.json';
+        const url = 'https://huyfpl.github.io/Shop_quanao_reactnative/Sever/sanpham.json';
         let response = await fetch(url, { method: 'GET' });
         let responseJSON = await response.json();
         this.setState({
