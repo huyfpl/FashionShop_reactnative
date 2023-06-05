@@ -1,6 +1,8 @@
 import React from "react";
-import { FlatList, View, StyleSheet, ScrollView, ActivityIndicator, Text } from "react-native";
+import { FlatList, View, StyleSheet, ScrollView, ActivityIndicator, Text,SafeAreaView} from "react-native";
 import SanPham from "../Component/SanPham";
+import Banner from "./Banner";
+
 export default class ListSanPham extends React.Component {
     static navigationOptions = {
         title: 'ListSanPham',
@@ -10,12 +12,14 @@ export default class ListSanPham extends React.Component {
         super();
         this.state = {
             products: null,
-            show: false
+            show: false,
+           
         };
         this.getProducts = this.getProducts.bind(this);
         this.renderItems = this.renderItems.bind(this);
         this.handlePress = this.handlePress.bind(this);
         this.displayloader = this.displayloader.bind(this);
+
 
     }
     componentDidMount() {
@@ -62,7 +66,8 @@ export default class ListSanPham extends React.Component {
     render() {
 
         return (
-            <View>
+            <View style={styles.container}>
+                <Banner/>
                 <ScrollView>
                     <View style={{ flex: 1 }}>
                         {
@@ -85,7 +90,8 @@ const styles = StyleSheet.create({
     container:{
     paddingHorizontal:8,
     paddingTop:10,
-    backgroundColor:'#E3E3E3'
+    backgroundColor:'#E3E3E3',
+    flex:1
     },
     wraper: {
         flex:1,

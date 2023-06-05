@@ -9,7 +9,7 @@ import Home from './Screen/Home';
 import DanhMuc from './Screen/Danhmuc';
 import Cart from './Screen/Cart';
 import User from './Screen/User';
-
+import Banner from './Screen/Banner';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -24,7 +24,9 @@ export default function AppNavigator() {
     }
 
     return (
+        
         <NavigationContainer>
+           
             <Tab.Navigator
                 initialRouteName="Home"
                 tabBarOptions={{
