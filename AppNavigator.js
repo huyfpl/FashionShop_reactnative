@@ -9,6 +9,7 @@ import Home from './Screen/Home';
 import DanhMuc from './Screen/Danhmuc';
 import Cart from './Screen/Cart';
 import User from './Screen/User';
+import { View,Text } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -25,6 +26,9 @@ export default function AppNavigator() {
 
     return (
         <NavigationContainer>
+            <View>
+                <Text>huy</Text>
+            </View>
             <Tab.Navigator
                 initialRouteName="Home"
                 tabBarOptions={{
