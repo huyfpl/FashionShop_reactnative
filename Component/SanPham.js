@@ -7,9 +7,7 @@ export default function SanPham(props) {
         handlePress ? handlePress(dataProd) : null;
     }
     return (
-        <TouchableWithoutFeedback onPress={fun_handlePress}>
-
-   
+        <TouchableWithoutFeedback onPress={fun_handlePress} style={styles.all}>
         <View style={styles.shadow}>
             <View style={styles.container}>
                 <Image source={{ uri: dataProd.anhSP }}
@@ -27,13 +25,63 @@ export default function SanPham(props) {
                 </View>
             </View>
         </View>
+      
         </TouchableWithoutFeedback>
+     
     )
 
 }
 const styles = StyleSheet.create({
-shadow:{
-    shadowColor:'#000'
-
-}
+    shadow: {
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+        shadowOffset: { width: 0, height: 0 },
+        alignItems:'center',
+       
+      },
+      star_sold_product: {
+        flexDirection: 'row',
+        alignItems: 'center',
+      },
+      star: {
+        height: 10,
+        width: 10,
+        marginRight: 5,
+      },
+      container: {
+        width:200,
+        marginBottom: 20,
+        borderRadius: 10,
+        overflow: 'hidden',
+        flex: 1,
+        backgroundColor:"#FFFBF9",
+        padding:5,
+        height:290
+   
+      },
+      info: {
+        padding: 8,
+      },
+      img: {
+        height: 190,
+        borderRadius:10,
+      },
+      tensp: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 5,
+      },
+      price: {
+        flexDirection: 'row',
+        alignItems: 'center',
+      },
+      item_price: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginRight: 5,
+      },
+      kihieu: {
+        fontSize: 16,
+      },
 })

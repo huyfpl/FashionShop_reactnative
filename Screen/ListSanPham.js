@@ -1,11 +1,11 @@
 import React from "react";
-import { FlatList, View, StyleSheet, ScrollView, ActivityIndicator,Text } from "react-native";
+import { FlatList, View, StyleSheet, ScrollView, ActivityIndicator, Text } from "react-native";
 import SanPham from "../Component/SanPham";
 export default class ListSanPham extends React.Component {
     static navigationOptions = {
         title: 'ListSanPham',
-      };
-      
+    };
+
     constructor() {
         super();
         this.state = {
@@ -16,12 +16,12 @@ export default class ListSanPham extends React.Component {
         this.renderItems = this.renderItems.bind(this);
         this.handlePress = this.handlePress.bind(this);
         this.displayloader = this.displayloader.bind(this);
-        
+
     }
     componentDidMount() {
         this.getProducts();
         this.displayloader();
-        
+
     }
     displayloader() {
         this.setState({ show: true });
@@ -38,27 +38,29 @@ export default class ListSanPham extends React.Component {
         });
 
     }
-  
+
     handlePress(dataProd) {
-    const {navigation}=this.props;
-       navigation.navigate('ChiTietSanPham', { data: dataProd });
+        const { navigation } = this.props;
+        navigation.navigate('ChiTietSanPham', { data: dataProd });
 
     }
     renderItems({ index, item }) {
         console.log(item)
         return (
+            <View style={styles.wraper}>
+                <SanPham
+                    dataProd={item}
+                    handlePress={this.handlePress}
+                />
+            </View>
 
-             <SanPham
-                  dataProd={item}
-                  handlePress={this.handlePress}
-             />
 
 
         );
 
-   }
+    }
     render() {
-        
+
         return (
             <View>
                 <ScrollView>
@@ -69,7 +71,7 @@ export default class ListSanPham extends React.Component {
                                     data={this.state.products}
                                     renderItem={this.renderItems}
                                     numColumns={2}
-                                    
+                                    contentContainerStyle={styles.container}
                                     removeClippedSubviews
                                 />
                         }
@@ -79,3 +81,14 @@ export default class ListSanPham extends React.Component {
         )
     }
 }
+const styles = StyleSheet.create({
+    container:{
+    paddingHorizontal:8,
+    paddingTop:10,
+    backgroundColor:'#E3E3E3'
+    },
+    wraper: {
+        flex:1,
+        paddingHorizontal: 4
+    }
+})
