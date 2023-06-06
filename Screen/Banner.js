@@ -72,13 +72,15 @@ alignItems:'center',
   },
   dotActive: {
     margin: 3,
-    color: 'red',
+    color: '#FF6C4B',
     fontSize: 18,
+  
+   
   },
   dot: {
     margin: 3,
-    color: 'blue',
+    color: '#E0E0E0',
     fontSize: 18,
-    
+ 
   },
 });
