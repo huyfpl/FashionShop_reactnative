@@ -1,41 +1,23 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, ScrollView, Text, SafeAreaView, Dimensions, Image } from "react-native";
 
 const images = [
+  'https://web.hn.ss.bfcplatform.vn/muadienmay/content/article2/3087889034-1620532650.jpg',
   'https://iili.io/H4nYOzb.png',
-  'https://iili.io/H4nYOzb.png',
-  'https://iili.io/H4nYOzb.png',
-  'https://iili.io/H4nYOzb.png',
+  'https://iili.io/H4nYOzb.png'
 ];
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
-const maxImg = images.length - 1;
+
 export default function Banner() {
   const [img, setImg] = useState(0);
-  const scrollViewRef = useRef(null);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setImg((prevImg) => (prevImg + 1) % images.length);
-    }, 3000);
-  
-    return () => clearInterval(interval);
-  }, []);
-  useEffect(() => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollTo({
-        x: img * WIDTH,
-        animated: true,
-      });
-    }
-  }, [img]);
-  const onScrollEnd = (event) => {
-    const slide = Math.floor(event.nativeEvent.contentOffset.x / WIDTH);
-    if (slide !== img) {
-      setImg(slide);
-    }
-    else if(slide===maxImg){
-      setImg(0);
+  const onChange = (event) => {
+    if (event) {
+      const slide = Math.ceil(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width);
+      if (slide !== img) {
+        setImg(slide);
+      }
     }
   };
 
@@ -43,19 +25,17 @@ export default function Banner() {
     <SafeAreaView style={styles.container}>
       <View style={styles.wrap}>
         <ScrollView
-          ref={scrollViewRef}
-          onMomentumScrollEnd={onScrollEnd}
+          onScroll={onChange}
           showsHorizontalScrollIndicator={false}
           pagingEnabled
           horizontal
           style={styles.wrap}
-          
         >
           {images.map((e, index) => (
             <Image
               key={e}
               resizeMode='stretch'
-              style={{ ...styles.wrap, width: WIDTH }}
+              style={styles.wrap}
               source={{ uri: e }}
             />
           ))}
@@ -66,7 +46,7 @@ export default function Banner() {
               key={e}
               style={img === index ? styles.dotActive : styles.dot}
             >
-              ●
+                  ●
             </Text>
           ))}
         </View>
@@ -76,8 +56,9 @@ export default function Banner() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
+  container:{
+alignItems:'center',
+
   },
   wrap: {
     width: WIDTH,
@@ -87,16 +68,19 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     flexDirection: 'row',
-    alignSelf: 'center'
+    alignSelf:'center'
   },
   dotActive: {
     margin: 3,
     color: '#FF6C4B',
     fontSize: 18,
+  
+   
   },
   dot: {
     margin: 3,
     color: '#E0E0E0',
     fontSize: 18,
+ 
   },
 });
