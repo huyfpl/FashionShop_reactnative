@@ -1,0 +1,42 @@
+<form action="/add" method="post" class="container"
+    style="padding: 30px;  max-width: 400px; margin: 10px auto; background-color: aquamarine;">
+    <!-- 2 column grid layout with text inputs for the first and last names -->
+    <div class="row mb-4 ">
+        <div class="form-outline mb-4 " style="text-align: center;">
+            <h3> New </h3>
+        </div>
+
+        <div class="col">
+            <div class="form-outline">
+                <input type="text" id="masp" class="form-control" name="masp" required />
+                <label class="form-label" for="">mã sản phẩm</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-outline">
+                <input type="text" id="tensp" class="form-control" name="tensp" required/>
+                <label class="form-label" for="tensp">tên sản phẩm</label>
+            </div>
+        </div>
+    </div>
+    <div class="form-outline mb-4">
+        <input type="text" id="imagesp" class="form-control" name="imagesp" required/>
+        <label class="form-label" for="imagesp">ảnh sản phẩm</label>
+    </div>
+    <!-- Email input -->
+    <div class="form-outline mb-4">
+        <input type="text" id="sizesp" class="form-control" name="sizesp" required/>
+        <label class="form-label" for="sizesp">kích thước</label>
+    </div>
+    <div class="form-outline mb-4">
+        <input type="number" id="giasp" class="form-control" name="giasp" required/>
+        <label class="form-label" for="giasp">giá sản phẩm</label>
+    </div>
+
+
+    <!-- Submit button -->
+    <button type="submit" class="btn btn-primary btn-block mb-4">add</button>
+
+
+
+</form>
