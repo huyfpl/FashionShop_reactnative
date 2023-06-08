@@ -14,6 +14,12 @@ export default function Banner() {
   const [img, setImg] = useState(0);
   const scrollViewRef = useRef(null);
 
+  const onChange = (event) => {
+    if (event) {
+      const slide = Math.floor(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width);
+      if (slide !== img) {
+        setImg(slide);
+      }
   useEffect(() => {
     const interval = setInterval(() => {
       setImg((prevImg) => (prevImg + 1) % images.length);
