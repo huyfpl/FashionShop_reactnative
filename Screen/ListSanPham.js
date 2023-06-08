@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, View, StyleSheet, ScrollView, ActivityIndicator, Text,SafeAreaView} from "react-native";
+import { FlatList, View, StyleSheet, ScrollView, ActivityIndicator, Text, SafeAreaView } from "react-native";
 import SanPham from "../Component/SanPham";
 import Banner from "./Banner";
 
@@ -13,7 +13,7 @@ export default class ListSanPham extends React.Component {
         this.state = {
             products: null,
             show: false,
-           
+
         };
         this.getProducts = this.getProducts.bind(this);
         this.renderItems = this.renderItems.bind(this);
@@ -67,7 +67,7 @@ export default class ListSanPham extends React.Component {
 
         return (
             <View style={styles.container}>
-                <Banner/>
+                <Banner />
                 <ScrollView>
                     <View style={{ flex: 1 }}>
                         {
@@ -87,14 +87,17 @@ export default class ListSanPham extends React.Component {
     }
 }
 const styles = StyleSheet.create({
-    container:{
-    paddingHorizontal:8,
-    paddingTop:10,
-    backgroundColor:'#E3E3E3',
-    flex:1
+    container: {
+        paddingHorizontal: 8,
+        paddingTop: 10,
+        backgroundColor: '#E3E3E3',
+     
+        alignSelf: 'center',
+        alignContent: 'center',
+        alignItems: 'center',
     },
     wraper: {
-        flex:1,
-        paddingHorizontal: 4
+        paddingHorizontal: 4,
+
     }
 })
