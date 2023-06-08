@@ -14,7 +14,7 @@ export default function Banner() {
 
   const onChange = (event) => {
     if (event) {
-      const slide = Math.ceil(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width);
+      const slide = Math.floor(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width);
       if (slide !== img) {
         setImg(slide);
       }
