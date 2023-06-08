@@ -1,103 +1,115 @@
 import React from "react";
-import { FlatList, View, StyleSheet, ScrollView, ActivityIndicator, Text, SafeAreaView } from "react-native";
+import { FlatList, View, StyleSheet, ScrollView, ActivityIndicator, Text, SafeAreaView, RefreshControl } from "react-native";
 import SanPham from "../Component/SanPham";
 import Banner from "./Banner";
 
+const urlapi = 'http://192.168.0.105:3000/api/listsanpham';
+
 export default class ListSanPham extends React.Component {
-    static navigationOptions = {
-        title: 'ListSanPham',
+  static navigationOptions = {
+    title: 'ListSanPham',
+  };
+
+  constructor() {
+    super();
+    this.state = {
+      products: null,
+      show: false,
+      refreshing: false,
     };
+    this.getProducts = this.getProducts.bind(this);
+    this.renderItems = this.renderItems.bind(this);
+    this.handlePress = this.handlePress.bind(this);
+    this.displayloader = this.displayloader.bind(this);
+    this.handleRefresh = this.handleRefresh.bind(this);
+  }
 
-    constructor() {
-        super();
-        this.state = {
-            products: null,
-            show: false,
+  componentDidMount() {
+    this.getProducts();
+    this.displayloader();
+  }
 
-        };
-        this.getProducts = this.getProducts.bind(this);
-        this.renderItems = this.renderItems.bind(this);
-        this.handlePress = this.handlePress.bind(this);
-        this.displayloader = this.displayloader.bind(this);
+  displayloader() {
+    this.setState({ show: true });
+    setTimeout(() => {
+      this.setState({ show: false });
+    }, 3000);
+  }
 
-
+  async getProducts() {
+    try {
+      const response = await fetch(urlapi, { method: 'GET' });
+      const responseJSON = await response.json();
+      this.setState({
+        products: responseJSON.products,
+        refreshing: false, 
+      });
+    } catch (error) {
+      console.error(error);
+      this.setState({ refreshing: false }); 
     }
-    componentDidMount() {
-        this.getProducts();
-        this.displayloader();
+  }
 
-    }
-    displayloader() {
-        this.setState({ show: true });
-        setTimeout(() => {
-            this.setState({ show: false })
-        }, 3000);
-    }
-    async getProducts() {
-        const url = 'https://huyfpl.github.io/Shop_quanao_reactnative/Sever/sanpham.json';
-        let response = await fetch(url, { method: 'GET' });
-        let responseJSON = await response.json();
-        this.setState({
-            products: responseJSON.products,
-        });
+  handlePress(dataProd) {
+    const { navigation } = this.props;
+    navigation.navigate('ChiTietSanPham', { data: dataProd });
+  }
 
-    }
+  renderItems({ index, item }) {
+    console.log(item);
+    return (
+      <View style={styles.wraper}>
+        <SanPham dataProd={item} handlePress={this.handlePress} />
+      </View>
+    );
+  }
 
-    handlePress(dataProd) {
-        const { navigation } = this.props;
-        navigation.navigate('ChiTietSanPham', { data: dataProd });
+  handleRefresh() {
+    this.setState({ refreshing: true });
+    this.getProducts();
+  }
 
-    }
-    renderItems({ index, item }) {
-        console.log(item)
-        return (
-            <View style={styles.wraper}>
-                <SanPham
-                    dataProd={item}
-                    handlePress={this.handlePress}
-                />
-            </View>
-
-
-
-        );
-
-    }
-    render() {
-
-        return (
-            <View style={styles.container}>
-                <Banner />
-                <ScrollView>
-                    <View style={{ flex: 1 }}>
-                        {
-                            this.state.show ?
-                                <ActivityIndicator animating={this.state.show} color="blue" /> : <FlatList
-                                    data={this.state.products}
-                                    renderItem={this.renderItems}
-                                    numColumns={2}
-                                    contentContainerStyle={styles.container}
-                                    removeClippedSubviews
-                                />
-                        }
-                    </View>
-                </ScrollView>
-            </View>
-        )
-    }
+  render() {
+    return (
+      <View style={styles.container}>
+        <Banner />
+        <ScrollView
+          refreshControl={ 
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.handleRefresh}
+            />
+          }
+        >
+          <View style={{ flex: 1 }}>
+            {this.state.show ? (
+              <ActivityIndicator animating={this.state.show} color="blue" />
+            ) : (
+              <FlatList
+                data={this.state.products}
+                renderItem={this.renderItems}
+                numColumns={2}
+                contentContainerStyle={styles.container}
+                removeClippedSubviews
+              />
+            )}
+          </View>
+        </ScrollView>
+      </View>
+    );
+  }
 }
-const styles = StyleSheet.create({
-    container: {
-        paddingHorizontal: 8,
-        paddingTop: 10,
-        backgroundColor: '#E3E3E3',
-     
-        alignSelf: 'center',
-        alignContent: 'center',
-        alignItems: 'center',
-    },
-    wraper: {
-        paddingHorizontal: 4,
 
-    }
-})
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 8,
+    paddingTop: 10,
+    backgroundColor: '#E3E3E3',
+    alignSelf: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  wraper: {
+    paddingHorizontal: 4,
+  },
+});

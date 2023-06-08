@@ -3,9 +3,9 @@ import { View, StyleSheet, ScrollView, Text, SafeAreaView, Dimensions, Image } f
 
 const images = [
   'https://iili.io/H4nYOzb.png',
-  'https://iili.io/H4nYOzb.png',
-  'https://iili.io/H4nYOzb.png',
-  'https://iili.io/H4nYOzb.png',
+  'https://png.pngtree.com/thumb_back/fw800/background/20190222/ourmid/pngtree-blue-swimming-pool-swim-ring-banner-background-material-poolswimming-poolswimming-ringsummerpool-image_50634.jpg',
+  'https://png.pngtree.com/thumb_back/fw800/back_pic/04/52/15/08585f9ccc93f5b.jpg',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTevf00TTArB_-yDdH7dzyNocSIKzD7iNHLLbO_4hCBvyjhOSDlphgSLMWzbU38hs7Rfuo&usqp=CAU',
 ];
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
