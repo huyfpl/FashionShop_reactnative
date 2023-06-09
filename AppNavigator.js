@@ -10,69 +10,76 @@ import DanhMuc from './Screen/Danhmuc';
 import Cart from './Screen/Cart';
 import User from './Screen/User';
 import Banner from './Screen/Banner';
+import { View } from 'react-native';
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+import { TouchableOpacity } from 'react-native';
+
+function TabNavigator() {
+    return (
+        <Tab.Navigator
+            initialRouteName="Home"
+            tabBarOptions={{
+                activeTintColor: '#FF4D15',
+                inactiveTintColor: '#C5C5C5',
+                labelStyle: {
+                    fontSize: 14,
+                    fontWeight: 'bold',
+                },
+            }}
+        >
+            <Tab.Screen
+                name="Home"
+                component={ListSanPham}
+                options={{
+                    title: 'Home',
+                    tabBarIcon: ({ color }) => (
+                        <MaterialCommunityIcons name="home" color={color} size={26} />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="DanhMuc"
+                component={DanhMuc}
+                options={{
+                    title: 'Danh Mục',
+                    tabBarIcon: ({ color }) => (
+                        <MaterialCommunityIcons name="folder" color={color} size={26} />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="Cart"
+                component={Cart}
+                options={{
+                    title: 'Cart',
+                    tabBarIcon: ({ color }) => (
+                        <MaterialCommunityIcons name="cart" color={color} size={26} />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="User"
+                component={User}
+                options={{
+                    title: 'User',
+                    tabBarIcon: ({ color }) => (
+                        <MaterialCommunityIcons name="account" color={color} size={26} />
+                    ),
+                }}
+            />
+        </Tab.Navigator>
+    );
+}
 
 export default function AppNavigator() {
-    function HomeStack() {
-        return (
+    return (
+        <NavigationContainer>
             <Stack.Navigator>
-                <Stack.Screen name="ListSanPham" component={ListSanPham} />
+                <Stack.Screen name="Home" component={TabNavigator} options={{ headerShown: false }}/>
                 <Stack.Screen name="ChiTietSanPham" component={ChiTietSanPham} />
             </Stack.Navigator>
-        );
-    }
-
-    return (
-        
-        <NavigationContainer>
-           
-            <Tab.Navigator
-                initialRouteName="Home"
-                tabBarOptions={{
-                    activeTintColor: '#FF4D15',
-                    inactiveTintColor: '#C5C5C5',
-                    labelStyle: {
-                        fontSize: 14,
-                        fontWeight: 'bold',
-
-                    },
-
-
-                }
-
-                }
-            >
-                <Tab.Screen
-                    name="Home"
-                    component={HomeStack}
-                    options={{
-                        tabBarLabel: 'Home',
-                        headerShown: false,
-                        tabBarIcon: ({ color }) => (
-                            <MaterialCommunityIcons name="home" color={color} size={26} />
-                        ),
-                    }}
-                />
-                <Tab.Screen name="DanhMuc" component={DanhMuc}
-                    options={{
-                        tabBarIcon: ({ color }) => (
-                            <MaterialCommunityIcons name="folder" color={color} size={26} />
-                        ),
-                    }} />
-                <Tab.Screen name="Cart" component={Cart}
-                    options={{
-                        tabBarIcon: ({ color }) => (
-                            <MaterialCommunityIcons name="cart" color={color} size={26} />
-                        ),
-                    }} />
-                <Tab.Screen name="User" component={User}
-                    options={{
-                        tabBarIcon: ({ color }) => (
-                            <MaterialCommunityIcons name="account" color={color} size={26} />
-                        ),
-                    }} />
-            </Tab.Navigator>
         </NavigationContainer>
     );
 }
