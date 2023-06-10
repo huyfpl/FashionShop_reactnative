@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Image} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 
 export default class LoginScreen extends Component {
@@ -35,59 +36,110 @@ export default class LoginScreen extends Component {
     const { username, password, userList } = this.state;
     const user = userList.find((user) => user.tentaikhoan === username && user.pass === password);
     if (user) {
-        this.props.navigation.navigate('Home');
+      this.props.navigation.navigate('Home');
       console.log('Login successful');
     } else {
       console.log('Invalid credentials');
     }
   }
-  handleRegister(){
+  handleRegister() {
     this.props.navigation.navigate('Register');
   }
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.label}>Username:</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => this.setState({ username: text })}
-          value={this.state.username}
-        />
-        <Text style={styles.label}>Password:</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => this.setState({ password: text })}
-          value={this.state.password}
-          secureTextEntry
-        />
-        <TouchableOpacity style={styles.button} onPress={() => this.handleLogin()}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => this.handleRegister()}>
-          <Text style={styles.buttonText}>Register</Text>
-        </TouchableOpacity>
-      </View>
+      <ImageBackground source={require('../images/backgroup.png')} style={styles.backgroundImage}>
+        <View style={styles.logoContainer}>
+            <Image source={require('../images/logo1.png')} style={styles.logo} />
+          </View>
+        <View style={styles.container}>
+          <View style={styles.formContainer}>
+            <View style={styles.inputContainer}>
+              <View style={styles.iconContainer}>
+                <Icon name="user" size={25} color="gray" style={styles.icon} />
+              </View>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) => this.setState({ username: text })}
+                value={this.state.username}
+                placeholder="Username"
+                placeholderTextColor="gray"
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <View style={styles.iconContainer}>
+                <Icon name="lock" size={25} color="gray" style={styles.icon} />
+              </View>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) => this.setState({ password: text })}
+                value={this.state.password}
+                placeholder="Password"
+                placeholderTextColor="gray"
+                secureTextEntry
+              />
+            </View>
+
+            <TouchableOpacity style={styles.registerButton} onPress={() => this.handleRegister()}>
+              <Text style={styles.registerText}>Register</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.button} onPress={() => this.handleLogin()}>
+              <Text style={styles.buttonText}>Login</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ImageBackground>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    height: 750,
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
     paddingHorizontal: 20,
   },
-  label: {
-    fontSize: 16,
-    marginBottom: 5,
+  logoContainer: {
+    alignItems: 'center',
+    marginTop: 70,
+    paddingBottom:10
+
+  },
+  logo: {
+    width: 110,
+    height: 180
+  },
+  formContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    padding: 20,
+    borderRadius: 10,
+    shadowColor: 'black',
+    shadowOpacity: 0.5,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    borderBottomColor: 'gray',
+    borderBottomWidth: 1,
+    marginBottom: 10,
+  },
+  iconContainer: {
+    marginRight: 10,
+    marginTop: 10,
+  },
+  icon: {
+    alignSelf: 'center',
   },
   input: {
-    width: '100%',
+    flex: 1,
     height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
     paddingHorizontal: 10,
   },
   button: {
@@ -95,10 +147,21 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
+    marginTop: 15,
   },
   buttonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
+  registerButton: {
+    alignSelf: 'flex-end',
+    marginTop: 10,
+  },
+  registerText: {
+    color: 'blue',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },  
 });
