@@ -10,6 +10,8 @@ import DanhMuc from './Screen/Danhmuc';
 import Cart from './Screen/Cart';
 import User from './Screen/User';
 import Banner from './Screen/Banner';
+import Login from './Screen/Login';
+import Register from './Screen/Register';
 import { View } from 'react-native';
 
 const Stack = createNativeStackNavigator();
@@ -77,6 +79,8 @@ export default function AppNavigator() {
     return (
         <NavigationContainer>
             <Stack.Navigator>
+                <Stack.Screen name="Login" component={Login}/>
+                <Stack.Screen name="Register" component={Register}/>
                 <Stack.Screen name="Home" component={TabNavigator} options={{ headerShown: false }}/>
                 <Stack.Screen name="ChiTietSanPham" component={ChiTietSanPham} />
             </Stack.Navigator>

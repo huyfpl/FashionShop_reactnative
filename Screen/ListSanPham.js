@@ -2,7 +2,7 @@ import React from "react";
 import { FlatList, View, StyleSheet, ScrollView, ActivityIndicator, Text, SafeAreaView, RefreshControl } from "react-native";
 import SanPham from "../Component/SanPham";
 import Banner from "./Banner";
-const urlapi = 'http://192.168.0.102:3000/api/listsanpham';
+const urlapi = 'http://192.168.1.12:3000/api/listsanpham';
 
 export default class ListSanPham extends React.Component {
   static navigationOptions = {
