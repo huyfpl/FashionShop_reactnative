@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 10,
         shadowOffset: { width: 0, height: 0 },
-        
-        
+        margin:5
+
       },
       star_sold_product: {
         flexDirection: 'row',
@@ -50,12 +50,12 @@ const styles = StyleSheet.create({
         marginRight: 5,
       },
       container: {
-        marginBottom: 20,
+        marginBottom: 10,
         borderRadius: 10,
-        overflow: 'hidden',
         backgroundColor:"#FFFBF9",
         borderWidth:1,
-        width:160,
+        width:165,
+        flex:1
       },
       info: {
         padding: 8,
