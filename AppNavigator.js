@@ -12,6 +12,7 @@ import User from './Screen/User';
 import Banner from './Screen/Banner';
 import Login from './Screen/Login';
 import Register from './Screen/Register';
+import Splash from './Screen/Splash';
 import { View } from 'react-native';
 
 const Stack = createNativeStackNavigator();
@@ -79,6 +80,7 @@ export default function AppNavigator() {
     return (
         <NavigationContainer>
             <Stack.Navigator>
+            <Stack.Screen name="Splash" component={Splash}/>
                 <Stack.Screen name="Login" component={Login}/>
                 <Stack.Screen name="Register" component={Register}/>
                 <Stack.Screen name="Home" component={TabNavigator} options={{ headerShown: false }}/>
