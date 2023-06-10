@@ -2,8 +2,7 @@ import React from "react";
 import { FlatList, View, StyleSheet, ScrollView, ActivityIndicator, Text, SafeAreaView, RefreshControl } from "react-native";
 import SanPham from "../Component/SanPham";
 import Banner from "./Banner";
-const urlapi = 'http://192.168.1.12:3000/api/listsanpham';
-
+import { API_LIST_SANPHAM } from "../helpers/api";
 export default class ListSanPham extends React.Component {
   static navigationOptions = {
     title: 'ListSanPham',
@@ -37,7 +36,7 @@ export default class ListSanPham extends React.Component {
 
   async getProducts() {
     try {
-      const response = await fetch(urlapi, { method: 'GET' });
+      const response = await fetch(API_LIST_SANPHAM, { method: 'GET' });
       const responseJSON = await response.json();
       this.setState({
         products: responseJSON.products,
@@ -103,7 +102,7 @@ export default class ListSanPham extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 8,
+    paddingHorizontal: 2,
     paddingTop: 10,
     backgroundColor: '#E3E3E3',
     alignSelf: 'center',
@@ -111,6 +110,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   wraper: {
-    paddingHorizontal: 4,
+    paddingHorizontal: 5,
   },
 });

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import axios from 'axios';
-
+import { API_SIGNUP } from '../helpers/api';
 export default class RegisterScreen extends Component {
   constructor(props) {
     super(props);
@@ -17,7 +17,7 @@ export default class RegisterScreen extends Component {
 
   handleRegister() {
     const { username, password, ten, dia_chi, sdt, avatar } = this.state;
-    const url = 'http://192.168.1.12:3000/api/register-user';
+    const url = API_SIGNUP;
     axios
       .post(url, {
         tentaikhoan: username,

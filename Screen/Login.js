@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
-
+import {API_LOGIN} from '../helpers/api';
 export default class LoginScreen extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +18,7 @@ export default class LoginScreen extends Component {
   }
 
   getData() {
-    const url = 'http://192.168.1.12:3000/api/listuser';
+    const url = API_LOGIN;
     axios
       .get(url)
       .then((response) => {
