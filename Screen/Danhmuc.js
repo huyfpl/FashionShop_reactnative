@@ -1,18 +1,25 @@
-import React from "react";
+import React,{Component} from "react";
 import { View, Text, TouchableWithoutFeedback, StyleSheet, Image, FlatList, Modal, ActivityIndicator } from "react-native";
 import axios from "axios";
 import { API_LIST_DANHMUC, API_LIST_SANPHAM_DANHMUC } from "../helpers/api";
 import SanPham from "../Component/SanPham";
-export default class DanhMuc extends React.Component {
-    state = {
-        danhMucList: [], // Danh sách danh mục từ API
-        selectedDanhMuc: null, // Danh mục được chọn
-        danhSachSanPham: [], // Danh sách sản phẩm theo danh mục
-        loading: false, // Trạng thái loading khi gọi API
+export default class DanhMuc extends Component {
+    constructor(props) {
+        super(props);
+    this.state = {
+        danhMucList: [], 
+        selectedDanhMuc: null, 
+        danhSachSanPham: [],
+        loading: false, 
     };
+    this.handlePress = this.handlePress.bind(this);
+    
+    }
 
     componentDidMount() {
         this.fetchDanhMucList();
+        this.props.navigation.addListener('focus', this.componentDidFocus);
+        console.warn(this.state.selectedDanhMuc)
     }
 
     fetchDanhMucList = async () => {
@@ -48,6 +55,7 @@ export default class DanhMuc extends React.Component {
         this.setState({ selectedDanhMuc: item }, () => {
             this.fetchSanPhamByDanhMuc(item.id_danhmuc);
         });
+       
     };
 
     renderDanhMucItem = ({ item }) => (
@@ -58,21 +66,28 @@ export default class DanhMuc extends React.Component {
             </View>
         </TouchableWithoutFeedback>
     );
-    handlePress(dataProd) {
-        const { navigation } = this.props;
-        navigation.navigate('ChiTietSanPham', { data: dataProd });
-
+    
+    handlePress=(dataProd)=> {
+        this.setState({ selectedDanhMuc: null }, () => {
+            this.props.navigation.navigate('ChiTietSanPham', { data: dataProd });
+        });//
+        
     }
+    componentDidFocus = () => {
+        const { selectedDanhMuc } = this.state;
+        if (selectedDanhMuc) {
+          this.fetchSanPhamByDanhMuc(selectedDanhMuc.id_danhmuc);
+        }
+    
+      };
     renderSanPhamItem = ({ item, index }) => {
 
         const isOddItem = index % 2 !== 0;
 
         if (isOddItem) {
-            // Return null for odd items since they will be wrapped in the previous row
+           
             return null;
         }
-
-        // Get the next item for the even index
         const nextItem = this.state.danhSachSanPham[index + 1];
 
         return (
@@ -88,42 +103,47 @@ export default class DanhMuc extends React.Component {
 
     render() {
         const { danhMucList, selectedDanhMuc, danhSachSanPham, loading } = this.state;
-
-        return (
+      
+        if (selectedDanhMuc === null) {
+          return (
             <View style={styles.container}>
-                <FlatList
-                    data={danhMucList}
-                    renderItem={this.renderDanhMucItem}
-                    keyExtractor={(item) => item.id_danhmuc}
-                    contentContainerStyle={styles.listContainer}
-                    numColumns={2}
-                />
-
-                <Modal visible={selectedDanhMuc !== null} animationType="slide">
-                    <View style={styles.modalContainer}>
-                        <Text style={styles.modalTitle}>{selectedDanhMuc?.ten_danhmuc}</Text>
-
-                        {loading ? (
-                            <ActivityIndicator size="large" color="gray" style={styles.loader} />
-                        ) : (
-                            <FlatList
-                                data={danhSachSanPham}
-                                renderItem={this.renderSanPhamItem}
-                                keyExtractor={(item) => item.idSP}
-                                contentContainerStyle={styles.sanPhamListContainer}
-                            />
-                        )}
-
-                        <TouchableWithoutFeedback onPress={() => this.setState({ selectedDanhMuc: null })}>
-                            <View style={styles.closeButton}>
-                                <Text style={styles.closeButtonText}>Đóng</Text>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </View>
-                </Modal>
+              <FlatList
+                data={danhMucList}
+                renderItem={this.renderDanhMucItem}
+                keyExtractor={(item) => item.id_danhmuc}
+                contentContainerStyle={styles.listContainer}
+                numColumns={2}
+              />
             </View>
+          );
+        }
+      
+        return (
+          <Modal visible={true} animationType="slide">
+            <View style={styles.modalContainer}>
+              <Text style={styles.modalTitle}>{selectedDanhMuc?.ten_danhmuc}</Text>
+      
+              {loading ? (
+                <ActivityIndicator size="large" color="gray" style={styles.loader} />
+              ) : (
+                <FlatList
+                  data={danhSachSanPham}
+                  renderItem={this.renderSanPhamItem}
+                  keyExtractor={(item) => item.idSP}
+                  contentContainerStyle={styles.sanPhamListContainer}
+                />
+              )}
+      
+              <TouchableWithoutFeedback onPress={() => this.setState({ selectedDanhMuc: null })}>
+                <View style={styles.closeButton}>
+                  <Text style={styles.closeButtonText}>Đóng</Text>
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+          </Modal>
         );
-    }
+      }
+      
 }
 
 const styles = StyleSheet.create({

@@ -40,6 +40,12 @@ export default class RegisterScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+         <Text style={styles.label}>Full Name:</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => this.setState({ ten: text })}
+          value={this.state.ten}
+        />
         <Text style={styles.label}>Username:</Text>
         <TextInput
           style={styles.input}
@@ -53,29 +59,11 @@ export default class RegisterScreen extends Component {
           value={this.state.password}
           secureTextEntry
         />
-        <Text style={styles.label}>Full Name:</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => this.setState({ ten: text })}
-          value={this.state.ten}
-        />
-        <Text style={styles.label}>Address:</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => this.setState({ dia_chi: text })}
-          value={this.state.dia_chi}
-        />
         <Text style={styles.label}>Phone Number:</Text>
         <TextInput
           style={styles.input}
           onChangeText={(text) => this.setState({ sdt: text })}
           value={this.state.sdt}
-        />
-        <Text style={styles.label}>Avatar:</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => this.setState({ avatar: text })}
-          value={this.state.avatar}
         />
         <TouchableOpacity style={styles.button} onPress={() => this.handleRegister()}>
           <Text style={styles.buttonText}>Register</Text>
