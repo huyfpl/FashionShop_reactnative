@@ -1,12 +1,14 @@
 import React from "react";
 import { Text, View, Image, StyleSheet, TouchableWithoutFeedback }
     from "react-native";
+    import DanhMuc from "../Screen/Danhmuc";
 export default function SanPham(props) {
-    const { dataProd, handlePress } = props;
+    const { dataProd, handlePress} = props;
     const fun_handlePress = () => {
         handlePress ? handlePress(dataProd) : null;
     }
     return (
+        <View>
         <TouchableWithoutFeedback onPress={fun_handlePress} style={styles.all}>
         <View style={styles.shadow}>
             <View style={styles.container}>
@@ -27,7 +29,7 @@ export default function SanPham(props) {
         </View>
       
         </TouchableWithoutFeedback>
-     
+        </View>
     )
 
 }
