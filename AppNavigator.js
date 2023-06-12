@@ -79,7 +79,7 @@ function TabNavigator() {
 export default function AppNavigator() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='Register'>
+            <Stack.Navigator initialRouteName='Splash'>
             <Stack.Screen name="Splash" component={Splash}/>
                 <Stack.Screen name="Login" component={Login}/>
                 <Stack.Screen name="Register" component={Register}/>
