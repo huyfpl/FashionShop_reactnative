@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, I
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import {API_LOGIN} from '../helpers/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default class LoginScreen extends Component {
   constructor(props) {
     super(props);
@@ -36,10 +37,16 @@ export default class LoginScreen extends Component {
     const { username, password, userList } = this.state;
     const user = userList.find((user) => user.tentaikhoan === username && user.pass === password);
     if (user) {
-      this.props.navigation.navigate('Home');
-      console.log('Login successful');
+      console.warn('User already'+user.id);
+      const userId = user.id.toString();
+      AsyncStorage.setItem('userId',user.id.toString())
+      .then((value)=>{
+          this.props.navigation.navigate('Home');
+          console.warn('Login successful');
+      })
+     
     } else {
-      console.log('Invalid credentials');
+      console.warn('Invalid credentials');
     }
   }
   handleRegister() {
