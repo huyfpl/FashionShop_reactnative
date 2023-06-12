@@ -1,12 +1,14 @@
 import React from "react";
 import { Text, View, Image, StyleSheet, TouchableWithoutFeedback }
     from "react-native";
+    import DanhMuc from "../Screen/Danhmuc";
 export default function SanPham(props) {
-    const { dataProd, handlePress } = props;
+    const { dataProd, handlePress} = props;
     const fun_handlePress = () => {
         handlePress ? handlePress(dataProd) : null;
     }
     return (
+        <View>
         <TouchableWithoutFeedback onPress={fun_handlePress} style={styles.all}>
         <View style={styles.shadow}>
             <View style={styles.container}>
@@ -27,7 +29,7 @@ export default function SanPham(props) {
         </View>
       
         </TouchableWithoutFeedback>
-     
+        </View>
     )
 
 }
@@ -37,8 +39,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 10,
         shadowOffset: { width: 0, height: 0 },
-        
-        
+        margin:5
+
       },
       star_sold_product: {
         flexDirection: 'row',
@@ -50,12 +52,12 @@ const styles = StyleSheet.create({
         marginRight: 5,
       },
       container: {
-        marginBottom: 20,
+        marginBottom: 10,
         borderRadius: 10,
-        overflow: 'hidden',
         backgroundColor:"#FFFBF9",
         borderWidth:1,
-        width:160,
+        width:165,
+        flex:1
       },
       info: {
         padding: 8,
