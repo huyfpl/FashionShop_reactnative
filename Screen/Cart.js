@@ -94,11 +94,7 @@ export default class Cart extends React.Component {
               renderItem={this.renderProductItem}
               sliderHeight={100} 
               itemHeight={150} 
-<<<<<<< Updated upstream
-vertical={true} 
-=======
               vertical={true} 
->>>>>>> Stashed changes
               contentContainerStyle={styles.carouselContentContainer}
             />
             </View>
@@ -172,8 +168,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-<<<<<<< Updated upstream
 });
-=======
-});
->>>>>>> Stashed changes
+
