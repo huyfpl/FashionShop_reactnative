@@ -37,18 +37,19 @@ export default class LoginScreen extends Component {
     const { username, password, userList } = this.state;
     const user = userList.find((user) => user.tentaikhoan === username && user.pass === password);
     if (user) {
-      console.warn('User already'+user.id);
       const userId = user.id.toString();
-      AsyncStorage.setItem('userId',user.id.toString())
-      .then((value)=>{
-          this.props.navigation.navigate('Home');
-          console.warn('Login successful');
-      })
-     
+      AsyncStorage.setItem('userId', userId).then(() => {
+        this.props.navigation.reset({
+          index: 0,
+          routes: [{ name: 'Home' }],
+        });
+        console.warn('Login successful');
+      });
     } else {
       console.warn('Invalid credentials');
     }
   }
+  
   handleRegister() {
     this.props.navigation.navigate('Register');
   }
