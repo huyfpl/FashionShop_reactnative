@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Image} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
-import {API_LOGIN} from '../helpers/api';
+import { API_LOGIN } from '../helpers/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export default class LoginScreen extends Component {
   constructor(props) {
@@ -49,6 +49,10 @@ export default class LoginScreen extends Component {
       console.warn('Invalid credentials');
     }
   }
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
   handleRegister() {
     this.props.navigation.navigate('Register');
   }
@@ -56,8 +60,8 @@ export default class LoginScreen extends Component {
     return (
       <ImageBackground source={require('../images/backgroup.png')} style={styles.backgroundImage}>
         <View style={styles.logoContainer}>
-            <Image source={require('../images/logo1.png')} style={styles.logo} />
-          </View>
+          <Image source={require('../images/logo1.png')} style={styles.logo} />
+        </View>
         <View style={styles.container}>
           <View style={styles.formContainer}>
             <View style={styles.inputContainer}>
@@ -70,6 +74,8 @@ export default class LoginScreen extends Component {
                 value={this.state.username}
                 placeholder="Username"
                 placeholderTextColor="gray"
+                onSubmitEditing={() => this.passwordInput.focus()}
+                returnKeyType="next"
               />
             </View>
             <View style={styles.inputContainer}>
@@ -83,6 +89,9 @@ export default class LoginScreen extends Component {
                 placeholder="Password"
                 placeholderTextColor="gray"
                 secureTextEntry
+                ref={(input) => (this.passwordInput = input)}
+                onSubmitEditing={this.handleLogin}
+                returnKeyType="done"
               />
             </View>
 
@@ -114,7 +123,7 @@ const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
     marginTop: 70,
-    paddingBottom:10
+    paddingBottom: 10
 
   },
   logo: {
@@ -170,5 +179,5 @@ const styles = StyleSheet.create({
     color: 'blue',
     fontSize: 16,
     fontWeight: 'bold',
-  },  
+  },
 });

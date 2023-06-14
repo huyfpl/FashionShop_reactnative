@@ -1,4 +1,4 @@
-export const API_URL='http://192.168.0.105:3000/api'
+export const API_URL='http://10.24.48.206:3000/api'
 
 export const API_LIST_SANPHAM=API_URL+'/listsanpham'
 export const API_LOGIN=API_URL + '/listuser'

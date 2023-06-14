@@ -39,6 +39,7 @@ export default class RegisterScreen extends Component {
 
   render() {
     return (
+<<<<<<< Updated upstream
       <View style={styles.container}>
          <Text style={styles.label}>Full Name:</Text>
         <TextInput
@@ -69,8 +70,83 @@ export default class RegisterScreen extends Component {
           <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
       </View>
+=======
+      <ImageBackground source={require('../images/backgroup.png')} style={styles.backgroundImage}>
+        <View style={styles.container}>
+          <View style={styles.logoContainer}>
+            <Image source={require('../images/logo1.png')} style={styles.logo} />
+          </View>
+          <View style={styles.formContainer}>
+            <View style={styles.inputContainer}>
+              <View style={styles.iconContainer}>
+                <Icon name="user" size={25} color="gray" style={styles.icon} />
+              </View>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) => this.setState({ ten: text })}
+                value={this.state.ten}
+                placeholder="Full Name"
+                placeholderTextColor="gray"
+                onSubmitEditing={() => this.usernameInput.focus()} // Nhảy đến ô input username khi nhấn Enter
+                returnKeyType="next"
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <View style={styles.iconContainer}>
+                <Icon name="lock" size={25} color="gray" style={styles.icon} />
+              </View>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) => this.setState({ username: text })}
+                value={this.state.username}
+                placeholder="Username"
+                placeholderTextColor="gray"
+                ref={(input) => (this.usernameInput = input)} // Gán ref cho ô input username
+                onSubmitEditing={() => this.passwordInput.focus()} // Nhảy đến ô input password khi nhấn Enter
+                returnKeyType="next"
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <View style={styles.iconContainer}>
+                <Icon name="phone" size={25} color="gray" style={styles.icon} />
+              </View>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) => this.setState({ password: text })}
+                value={this.state.password}
+                secureTextEntry
+                placeholder="Password"
+                placeholderTextColor="gray"
+                ref={(input) => (this.passwordInput = input)} // Gán ref cho ô input password
+                onSubmitEditing={() => this.phoneInput.focus()} // Nhảy đến ô input phone khi nhấn Enter
+                returnKeyType="next"
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <View style={styles.iconContainer}>
+                <Icon name="pencil" size={25} color="gray" style={styles.icon} />
+              </View>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) => this.setState({ sdt: text })}
+                value={this.state.sdt}
+                placeholder="Phone Number"
+                placeholderTextColor="gray"
+                ref={(input) => (this.phoneInput = input)} // Gán ref cho ô input phone
+                onSubmitEditing={this.handleRegister} // Khi nhấn Enter ở ô input phone, thực hiện hàm handleRegister
+                returnKeyType="done"
+              />
+            </View>
+            <TouchableOpacity style={styles.button} onPress={() => this.handleRegister()}>
+              <Text style={styles.buttonText}>Register</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ImageBackground>
+>>>>>>> Stashed changes
     );
   }
+  
 }
 
 const styles = StyleSheet.create({
