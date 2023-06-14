@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, FlatList } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { API_LISTGIOHANG_USER_ID } from "../helpers/api";
+import { API_LISTGIOHANG_USER_ID,API_TANG_SOLUONG_GIOHANG,API_GIAM_SOLUONG_GIOHANG } from "../helpers/api";
 import axios from 'axios';
 import Carousel from 'react-native-snap-carousel';
 
@@ -14,6 +14,7 @@ export default class Cart extends React.Component {
       danhMuc: {},
       selectedCategory: null, // Danh mục được chọn
       tongTien: 0,
+      soluong:0
     };
   }
 
@@ -62,18 +63,15 @@ export default class Cart extends React.Component {
     this.setState({ selectedCategory: categoryName });
   }
 
-  hhandleIncreaseQuantity = (itemIndex) => {
-    const { giohang } = this.state;
-    giohang[itemIndex].soluong += 1;
+  handleIncreaseQuantity = (idSP,soluong) => {
+    
     this.calculateTotal(); // Thêm dòng này
   }
   
   handleDecreaseQuantity = (itemIndex) => {
-    const { giohang } = this.state;
-    if (giohang[itemIndex].soluong > 1) {
-      giohang[itemIndex].soluong -= 1;
+   
       this.calculateTotal(); // Thêm dòng này
-    }
+    
   }
 
   calculateTotal = () => {
@@ -98,7 +96,7 @@ export default class Cart extends React.Component {
                 <Text style={styles.quantityButton}>-</Text>
               </TouchableOpacity>
               <Text style={styles.quantityText}>{item.soluong}</Text>
-              <TouchableOpacity onPress={() => this.handleIncreaseQuantity(index)}>
+              <TouchableOpacity onPress={() => this.handleIncreaseQuantity(item.idSP,item.soluong)}>
                 <Text style={styles.quantityButton}>+</Text>
               </TouchableOpacity>
             </View>
@@ -218,6 +216,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     paddingHorizontal: 8,
+    color:'red'
   },
   totalContainer: {
     flexDirection: 'row',
