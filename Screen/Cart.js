@@ -65,12 +65,12 @@ export default class Cart extends React.Component {
 
   handleIncreaseQuantity = (idSP,soluong) => {
     
-    this.calculateTotal(); // Thêm dòng này
+    this.calculateTotal(); 
   }
   
   handleDecreaseQuantity = (itemIndex) => {
    
-      this.calculateTotal(); // Thêm dòng này
+      this.calculateTotal(); 
     
   }
 
