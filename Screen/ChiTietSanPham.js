@@ -1,11 +1,17 @@
 import React from 'react';
-import { Text, View, Image, StyleSheet, TouchableWithoutFeedback, ScrollView, Pressable }
-
-    from "react-native";
+import { Text, View, Image, StyleSheet, TouchableWithoutFeedback, ScrollView, Pressable }from "react-native";
 import SanPham from '../Component/SanPham';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TouchableOpacity } from 'react-native';
+import { API_ADD_GIOHANG_USER } from '../helpers/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+
 export default class ChiTietSanPham extends React.Component {
+    constructor(props) {
+        super(props);
+      }
+    
     componentDidMount() {
         const { navigation, route } = this.props;
         navigation.setOptions({
@@ -20,6 +26,19 @@ export default class ChiTietSanPham extends React.Component {
             ),
         });
     }
+    addToCart = async () => {
+        const data = this.props.route.params.data;
+        console.log(data.idSP);
+        const userId = await AsyncStorage.getItem('userId');
+        console.log(userId);
+        try {
+            
+          await axios.post(`${API_ADD_GIOHANG_USER}/${userId}/${data.idSP}`);
+            console.warn('Sản phẩm đã được thêm vào giỏ hàng');
+          } catch (error) {
+            console.error('Lỗi thêm sản phẩm vào giỏ hàng');
+          }
+      }
     render() {
         const data = this.props.route.params.data;
         console.log(data)
@@ -59,7 +78,7 @@ export default class ChiTietSanPham extends React.Component {
 
                     <Pressable
                         style={styles.press_cart}
-                        onPress={() => console.log('Thêm vào giỏ hàng pressed')}
+                        onPress={() => this.addToCart()}
                     >
                         <MaterialCommunityIcons name="cart" size={20} style={{ color: 'white' }} />
                         <Text style={styles.cart}>Thêm vào giỏ hàng</Text>
