@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, FlatList } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_LISTGIOHANG_USER_ID } from "../helpers/api";
 import axios from 'axios';
@@ -11,7 +11,9 @@ export default class Cart extends React.Component {
     this.state = {
       userId: null,
       giohang: null,
-      danhMuc: {}, // Lưu trữ danh sách danh mục
+      danhMuc: {},
+      selectedCategory: null, // Danh mục được chọn
+      tongTien: 0,
     };
   }
 
@@ -45,18 +47,42 @@ export default class Cart extends React.Component {
         danhMuc[item.ten_danhmuc].push(item);
       });
 
-      this.setState({ giohang, danhMuc });
+      let tongTien = 0;
+      giohang.forEach(item => {
+        tongTien += item.giaBan * item.soluong;
+      });
+
+      this.setState({ giohang, danhMuc, tongTien });
     } catch (error) {
       console.error(error);
     }
   }
 
-  handleIncreaseQuantity = (itemIndex) => {
-    // Logic to increase quantity for the product at itemIndex
+  handleCategoryPress = (categoryName) => {
+    this.setState({ selectedCategory: categoryName });
   }
 
+  hhandleIncreaseQuantity = (itemIndex) => {
+    const { giohang } = this.state;
+    giohang[itemIndex].soluong += 1;
+    this.calculateTotal(); // Thêm dòng này
+  }
+  
   handleDecreaseQuantity = (itemIndex) => {
-    // Logic to decrease quantity for the product at itemIndex
+    const { giohang } = this.state;
+    if (giohang[itemIndex].soluong > 1) {
+      giohang[itemIndex].soluong -= 1;
+      this.calculateTotal(); // Thêm dòng này
+    }
+  }
+
+  calculateTotal = () => {
+    const { giohang } = this.state;
+    let tongTien = 0;
+    giohang.forEach(item => {
+      tongTien += item.giaBan * item.soluong;
+    });
+    this.setState({ tongTien });
   }
 
   renderProductItem = ({ item, index }) => {
@@ -66,6 +92,7 @@ export default class Cart extends React.Component {
           <Image source={{ uri: item.anhSP }} style={styles.productImage} />
           <View style={styles.productDetails}>
             <Text style={styles.productName}>{item.tenSP}</Text>
+            <Text style={styles.giaBan}>Giá: {item.giaBan}</Text>
             <View style={styles.quantityContainer}>
               <TouchableOpacity onPress={() => this.handleDecreaseQuantity(index)}>
                 <Text style={styles.quantityButton}>-</Text>
@@ -82,29 +109,47 @@ export default class Cart extends React.Component {
   }
 
   render() {
-    const { danhMuc } = this.state;
-    return (
-      <View style={styles.container}>
-        {Object.keys(danhMuc).length > 0 ? (
-          Object.keys(danhMuc).map(categoryName => (
-            <View key={categoryName} style={styles.carouselContainer}>
-              <Text style={styles.title}>{categoryName}</Text>
-              <Carousel
-              data={danhMuc[categoryName]}
+  const { danhMuc, tongTien, selectedCategory } = this.state;
+  return (
+    <View style={styles.container}>
+      <ScrollView>
+        {/* Hiển thị các danh mục */}
+        {Object.keys(danhMuc).map(categoryName => (
+          <TouchableOpacity
+            key={categoryName}
+            style={styles.categoryButton}
+            onPress={() => this.handleCategoryPress(categoryName)}
+          >
+            <Text style={styles.categoryButtonText}>{categoryName}</Text>
+          </TouchableOpacity>
+        ))}
+
+        {/* Hiển thị sản phẩm trong danh mục được chọn */}
+        {selectedCategory && danhMuc[selectedCategory] ? (
+          <View style={styles.categoryProducts}>
+            <Text style={styles.title}>{selectedCategory}</Text>
+            <FlatList
+              data={danhMuc[selectedCategory]}
               renderItem={this.renderProductItem}
-              sliderHeight={100} 
-              itemHeight={150} 
-              vertical={true} 
-              contentContainerStyle={styles.carouselContentContainer}
+              keyExtractor={(item, index) => index.toString()}
             />
-            </View>
-          ))
-        ) : (
-          <Text style={styles.emptyCartText}>No user data available</Text>
-        )}
+          </View>
+        ) : null}
+      </ScrollView>
+
+      {/* Hiển thị tổng tiền và nút thanh toán */}
+      <View style={styles.bottomContainer}>
+        <View style={styles.totalTextContainer}>
+          <Text style={styles.totalText}>Tổng tiền: {tongTien}</Text>
+        </View>
+        <TouchableOpacity style={styles.paymentButton} onPress={this.handlePayment}>
+          <Text style={styles.paymentButtonText}>Thanh toán</Text>
+        </TouchableOpacity>
       </View>
-    );
-  }
+    </View>
+  );
+}
+
 }
 
 const styles = StyleSheet.create({
@@ -113,11 +158,19 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#fff',
   },
-  carouselContainer:{
-  backgroundColor:'red',
+  categoryButton: {
+    backgroundColor: '#ebebeb',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    marginVertical: 5,
+    borderRadius: 5,
   },
-  carouselContentContainer:{
-    flexGrow: 1,
+  categoryButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  categoryProducts: {
+    marginTop: 10,
   },
   title: {
     fontSize: 18,
@@ -127,7 +180,7 @@ const styles = StyleSheet.create({
   productItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
   },
   productInfo: {
     flexDirection: 'row',
@@ -137,6 +190,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     marginRight: 10,
+    borderRadius: 8,
   },
   productDetails: {
     flex: 1,
@@ -148,6 +202,7 @@ const styles = StyleSheet.create({
   quantityContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 5,
   },
   quantityButton: {
     fontSize: 18,
@@ -164,9 +219,27 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingHorizontal: 8,
   },
-  emptyCartText: {
+  totalContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 20,
+  },
+  totalTextContainer: {
+    marginRight: 20,
+  },
+  totalText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  paymentButton: {
+    backgroundColor: 'blue',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+  },
+  paymentButtonText: {
+    color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
   },
 });
-
