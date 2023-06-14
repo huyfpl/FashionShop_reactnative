@@ -48,33 +48,32 @@ export default class RegisterScreen extends Component {
           </View>
           <View style={styles.formContainer}>
             <View style={styles.inputContainer}>
-              <View style={styles.iconContainer}>
-                <Icon name="user" size={25} color="gray" style={styles.icon} />
-              </View>
+              <Icon name="user" size={20} color="gray" style={styles.icon} />
               <TextInput
                 style={styles.input}
                 onChangeText={(text) => this.setState({ ten: text })}
                 value={this.state.ten}
                 placeholder="Full Name"
                 placeholderTextColor="gray"
+                onSubmitEditing={() => this.usernameInput.focus()}
+                returnKeyType="next"
               />
             </View>
             <View style={styles.inputContainer}>
-              <View style={styles.iconContainer}>
-                <Icon name="lock" size={25} color="gray" style={styles.icon} />
-              </View>
+              <Icon name="lock" size={20} color="gray" style={styles.icon} />
               <TextInput
                 style={styles.input}
                 onChangeText={(text) => this.setState({ username: text })}
                 value={this.state.username}
                 placeholder="Username"
                 placeholderTextColor="gray"
+                ref={(input) => (this.usernameInput = input)}
+                onSubmitEditing={() => this.passwordInput.focus()}
+                returnKeyType="next"
               />
             </View>
             <View style={styles.inputContainer}>
-              <View style={styles.iconContainer}>
-                <Icon name="phone" size={25} color="gray" style={styles.icon} />
-              </View>
+              <Icon name="phone" size={20} color="gray" style={styles.icon} />
               <TextInput
                 style={styles.input}
                 onChangeText={(text) => this.setState({ password: text })}
@@ -82,18 +81,22 @@ export default class RegisterScreen extends Component {
                 secureTextEntry
                 placeholder="Password"
                 placeholderTextColor="gray"
+                ref={(input) => (this.passwordInput = input)}
+                onSubmitEditing={() => this.phoneInput.focus()}
+                returnKeyType="next"
               />
             </View>
             <View style={styles.inputContainer}>
-              <View style={styles.iconContainer}>
-                <Icon name="pencil" size={25} color="gray" style={styles.icon} />
-              </View>
+              <Icon name="pencil" size={20} color="gray" style={styles.icon} />
               <TextInput
                 style={styles.input}
                 onChangeText={(text) => this.setState({ sdt: text })}
                 value={this.state.sdt}
                 placeholder="Phone Number"
                 placeholderTextColor="gray"
+                ref={(input) => (this.phoneInput = input)}
+                onSubmitEditing={this.handleRegister}
+                returnKeyType="done"
               />
             </View>
             <TouchableOpacity style={styles.button} onPress={() => this.handleRegister()}>
@@ -110,63 +113,60 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: 20,
+  },
+  logoContainer: {
+    marginBottom: 50,
+    alignItems: 'center',
+  },
+  logo: {
+    width: 200,
+    height: 100,
+    resizeMode: 'contain',
   },
   formContainer: {
     width: '100%',
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    padding: 20,
-    borderRadius: 10,
-    shadowColor: 'black',
-    shadowOpacity: 0.5,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 5,
+    alignItems: 'center',
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
-  },
-  iconContainer: {
-    marginRight: 10,
+    marginBottom: 20,
+    width: '80%',
+    backgroundColor:'#DDDDDD',
+    paddingHorizontal:5,
+    borderRadius:10
   },
   icon: {
-    alignSelf: 'center',
+    marginRight: 10,
+  },
+  inputWrapper: {
+    flex: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: 'gray',
   },
   input: {
     flex: 1,
     height: 40,
-    borderBottomWidth: 1,
-    borderBottomColor: 'gray',
-    paddingHorizontal: 10,
+    color: 'black',
+    fontSize: 16,
   },
   button: {
     backgroundColor: 'blue',
-    paddingVertical: 10,
     paddingHorizontal: 20,
+    paddingVertical: 10,
     borderRadius: 5,
-    marginTop: 15,
+    marginTop: 20,
   },
   buttonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
   },
   backgroundImage: {
     flex: 1,
     resizeMode: 'cover',
-    height: 750,
-  },
-  logoContainer: {
+    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
-    paddingBottom: 10,
-    marginBottom: 20,
-  },
-  logo: {
-    width: 110,
-    height: 180,
   },
 });

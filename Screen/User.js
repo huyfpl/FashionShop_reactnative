@@ -61,14 +61,14 @@ export default class User extends React.Component {
     const { user } = this.state;
 
     return (
-      <View>
+      <View style={styles.container}>
         <Text style={styles.title}>Tài khoản của tôi</Text>
+        <View style={styles.contentContainer}>
         {user ? (
           <View>
             {user.map((item, index) => (
               <View key={index} style={styles.userInfoContainer}>
                 <Image source={{ uri: item.avatar }} style={styles.avatar} />
-
                 <View style={styles.userInfo}>
                   <Text style={styles.name}>{item.ten}</Text>
                   <Text style={styles.username}>{item.tentaikhoan}</Text>
@@ -77,7 +77,7 @@ export default class User extends React.Component {
             ))}
           </View>
         ) : (
-          <Text>No user data available</Text>
+          <Text>.......Loading</Text>
         )}
 
         <View style={styles.buttonContainer}>
@@ -96,7 +96,7 @@ export default class User extends React.Component {
             <View style={styles.iconContainer}>
               <Icon name="gear" size={25} color="gray" style={styles.icon} />
             </View>
-            <TouchableOpacity style={[styles.button, { flex: 1 }]} >
+            <TouchableOpacity style={[styles.button, { flex: 1 }]} onPress={() => this.handlePressCart()} >
               <Text style={styles.buttonText}>Giỏ hàng</Text>
             </TouchableOpacity>
             <View style={styles.iconContainerChevron}>
@@ -115,7 +115,7 @@ export default class User extends React.Component {
             </View>
           </View>
         </View>
-
+        </View>
         <TouchableOpacity style={styles.logoutButton} onPress={() => this.handlePressLogin()}>
           <Text style={styles.logoutButtonText}>Log Out</Text>
         </TouchableOpacity>
@@ -124,6 +124,7 @@ export default class User extends React.Component {
   }
 }
 const styles = StyleSheet.create({
+
   userInfoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -141,6 +142,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
+    marginRight: 10
   },
   userInfo: {
     flex: 1,
@@ -157,7 +159,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     marginBottom: 10,
     margin: 15,
-    marginTop: 100
+
   },
   button: {
     paddingVertical: 10,
@@ -175,7 +177,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
-    marginTop: 50,
+   
     alignSelf: 'center',
     width: 300,
     height: 50
