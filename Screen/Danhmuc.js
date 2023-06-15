@@ -19,7 +19,6 @@ export default class DanhMuc extends Component {
     componentDidMount() {
         this.fetchDanhMucList();
         this.props.navigation.addListener('focus', this.componentDidFocus);
-        console.warn(this.state.selectedDanhMuc)
     }
 
     fetchDanhMucList = async () => {

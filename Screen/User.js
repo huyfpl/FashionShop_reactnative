@@ -14,6 +14,7 @@ export default class User extends React.Component {
     };
     this.handlePressLogin = this.handlePressLogin.bind(this)
     this.handlePressEdit = this.handlePressEdit.bind(this)
+    this.handlePressCart = this.handlePressCart.bind(this)
   }
 
   componentDidMount() {
@@ -56,6 +57,10 @@ export default class User extends React.Component {
   handlePressEdit = () => {
       this.props.navigation.navigate('EditUser',{data: this.state.userId});
   };
+
+  handlePressCart =()=>{
+    this.props.navigation.navigate('Cart');
+  }
 
   render() {
     const { user } = this.state;
@@ -142,7 +147,9 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    marginRight: 10
+    marginRight: 10,
+    borderWidth: 2,
+    borderColor: 'black',
   },
   userInfo: {
     flex: 1,
@@ -177,7 +184,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
-   
+    marginTop: 100,
     alignSelf: 'center',
     width: 300,
     height: 50
