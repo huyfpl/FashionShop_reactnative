@@ -23,7 +23,7 @@ export default class EditUser extends React.Component {
 
   async fetchUserData() {
     try {
-      const response = await axios.get(`http://10.24.48.206:3000/edit_user/${this.state.data}`);
+      const response = await axios.get(`http://192.168.1.8:3000/edit_user/${this.state.data}`);
       const data = response.data;
       this.setState({
         name: data.ten,
@@ -43,7 +43,7 @@ export default class EditUser extends React.Component {
 
     // Gửi dữ liệu đã chỉnh sửa lên server để lưu thay đổi
     try {
-      await axios.post(`http://10.24.48.206:3000/edit_user/${this.state.userId}`, {
+      await axios.post(`http://192.168.1.8:3000/edit_user/${this.state.userId}`, {
         ten: name,
         tentaikhoan: username,
         pass: password,
@@ -77,7 +77,7 @@ export default class EditUser extends React.Component {
               style={styles.input}
               value={this.state.name}
               onChangeText={(text) => this.setState({ name: text })}
-              placeholder="Full Name"
+              placeholder="Họ và tên"
               placeholderTextColor="gray"
               onSubmitEditing={() => this.passwordInput.focus()}
               returnKeyType="next"
@@ -92,7 +92,7 @@ export default class EditUser extends React.Component {
               secureTextEntry={true}
               value={this.state.password}
               onChangeText={(text) => this.setState({ password: text })}
-              placeholder="Password"
+              placeholder="Mật khẩu"
               placeholderTextColor="gray"
               ref={(input) => (this.passwordInput = input)}
               onSubmitEditing={() => this.addressInput.focus()}
@@ -107,7 +107,7 @@ export default class EditUser extends React.Component {
               style={styles.input}
               value={this.state.address}
               onChangeText={(text) => this.setState({ address: text })}
-              placeholder="Address"
+              placeholder="Địa chỉ"
               placeholderTextColor="gray"
               ref={(input) => (this.addressInput = input)}
               onSubmitEditing={() => this.phoneInput.focus()}
@@ -122,7 +122,7 @@ export default class EditUser extends React.Component {
               style={styles.input}
               value={this.state.phone}
               onChangeText={(text) => this.setState({ phone: text })}
-              placeholder="Phone number"
+              placeholder="Số điện thoại"
               placeholderTextColor="gray"
               ref={(input) => (this.phoneInput = input)}
               onSubmitEditing={() => this.avatarInput.focus()}

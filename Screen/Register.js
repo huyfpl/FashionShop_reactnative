@@ -32,7 +32,6 @@ export default class RegisterScreen extends Component {
       .then((response) => {
         this.props.navigation.navigate('Home');
         console.log(response.data);
-        // Xử lý sau khi đăng kí thành công
       })
       .catch((error) => {
         console.log(error);
@@ -53,7 +52,7 @@ export default class RegisterScreen extends Component {
                 style={styles.input}
                 onChangeText={(text) => this.setState({ ten: text })}
                 value={this.state.ten}
-                placeholder="Full Name"
+                placeholder="Họ và tên"
                 placeholderTextColor="gray"
                 onSubmitEditing={() => this.usernameInput.focus()}
                 returnKeyType="next"
@@ -65,7 +64,7 @@ export default class RegisterScreen extends Component {
                 style={styles.input}
                 onChangeText={(text) => this.setState({ username: text })}
                 value={this.state.username}
-                placeholder="Username"
+                placeholder="Tài khoản"
                 placeholderTextColor="gray"
                 ref={(input) => (this.usernameInput = input)}
                 onSubmitEditing={() => this.passwordInput.focus()}
@@ -79,7 +78,7 @@ export default class RegisterScreen extends Component {
                 onChangeText={(text) => this.setState({ password: text })}
                 value={this.state.password}
                 secureTextEntry
-                placeholder="Password"
+                placeholder="Mật khẩu"
                 placeholderTextColor="gray"
                 ref={(input) => (this.passwordInput = input)}
                 onSubmitEditing={() => this.phoneInput.focus()}
@@ -92,7 +91,7 @@ export default class RegisterScreen extends Component {
                 style={styles.input}
                 onChangeText={(text) => this.setState({ sdt: text })}
                 value={this.state.sdt}
-                placeholder="Phone Number"
+                placeholder="Số điện thoại"
                 placeholderTextColor="gray"
                 ref={(input) => (this.phoneInput = input)}
                 onSubmitEditing={this.handleRegister}

@@ -18,7 +18,7 @@ export default class ChiTietSanPham extends React.Component {
             title: "",
             headerRight: () => (
                 <View style={{ flexDirection: 'row', marginRight: 10 }}>
-                    <MaterialCommunityIcons name="cart" size={26} style={{ marginRight: 10, color: '#FF4D15' }} />
+                    <MaterialCommunityIcons name="cart" size={26} style={{ marginRight: 10, color: '#FF4D15' }} onPress={()=>this.props.navigation.navigate('Cart')}/>
                     <TouchableOpacity onPress={() => console.log('Heart pressed')}>
                         <MaterialCommunityIcons name="heart" size={26} style={{ color: '#C5C5C5' }} />
                     </TouchableOpacity>
