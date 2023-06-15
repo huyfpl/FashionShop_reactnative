@@ -1,8 +1,9 @@
 import React from "react";
-import { FlatList, View, StyleSheet, ScrollView, ActivityIndicator, Text, SafeAreaView, RefreshControl } from "react-native";
+import { FlatList, View, StyleSheet, ScrollView, ActivityIndicator, Text, RefreshControl, SafeAreaView } from "react-native";
 import SanPham from "../Component/SanPham";
 import Banner from "./Banner";
 import { API_LIST_SANPHAM } from "../helpers/api";
+
 export default class ListSanPham extends React.Component {
   static navigationOptions = {
     title: 'ListSanPham',
@@ -70,8 +71,7 @@ export default class ListSanPham extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-      
+      <SafeAreaView style={styles.container}>
         <ScrollView
           refreshControl={ 
             <RefreshControl
@@ -80,7 +80,7 @@ export default class ListSanPham extends React.Component {
             />
           }
         >
-            <Banner />
+          <Banner />
           <View style={{ flex: 1 }}>
             {this.state.show ? (
               <ActivityIndicator animating={this.state.show} color="blue" />
@@ -90,12 +90,11 @@ export default class ListSanPham extends React.Component {
                 renderItem={this.renderItems}
                 numColumns={2}
                 contentContainerStyle={styles.container}
-                removeClippedSubviews
               />
             )}
           </View>
         </ScrollView>
-      </View>
+      </SafeAreaView>
     );
   }
 }

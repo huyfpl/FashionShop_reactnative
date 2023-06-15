@@ -43,10 +43,10 @@ export default class LoginScreen extends Component {
           index: 0,
           routes: [{ name: 'Home' }],
         });
-        console.warn('Login successful');
+        console.log('Login successful');
       });
     } else {
-      console.warn('Invalid credentials');
+      console.log('....Loading');
     }
   }
   
@@ -88,11 +88,11 @@ export default class LoginScreen extends Component {
             </View>
 
             <TouchableOpacity style={styles.registerButton} onPress={() => this.handleRegister()}>
-              <Text style={styles.registerText}>Register</Text>
+              <Text style={styles.registerText}>Đăng kí</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.button} onPress={() => this.handleLogin()}>
-              <Text style={styles.buttonText}>Login</Text>
+              <Text style={styles.buttonText}>Đăng nhập</Text>
             </TouchableOpacity>
           </View>
         </View>
