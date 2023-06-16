@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Image, StyleSheet, TouchableWithoutFeedback, ScrollView, Pressable }from "react-native";
+import { Text, View, Image, StyleSheet, TouchableWithoutFeedback, ScrollView, Pressable, ToastAndroid } from "react-native";
 import SanPham from '../Component/SanPham';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TouchableOpacity } from 'react-native';
@@ -10,16 +10,26 @@ import axios from 'axios';
 export default class ChiTietSanPham extends React.Component {
     constructor(props) {
         super(props);
-      }
-    
+    }
+
+    themyeuthich = () => {
+        const data = this.props.route.params.data;
+        ToastAndroid.show('Đã thêm vào yêu thích ✓', ToastAndroid.SHORT);
+    }
+    giohang=()=>{
+       this.props.navigation.navigate('Cart')
+    }
     componentDidMount() {
         const { navigation, route } = this.props;
         navigation.setOptions({
             title: "",
             headerRight: () => (
                 <View style={{ flexDirection: 'row', marginRight: 10 }}>
-                    <MaterialCommunityIcons name="cart" size={26} style={{ marginRight: 10, color: '#FF4D15' }} onPress={()=>this.props.navigation.navigate('Cart')}/>
-                    <TouchableOpacity onPress={() => console.log('Heart pressed')}>
+                    <TouchableOpacity onPress={() => this.giohang()}>
+                        <MaterialCommunityIcons name="cart" size={26} style={{ marginRight: 10, color: '#FF4D15' }} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => this.themyeuthich()}>
                         <MaterialCommunityIcons name="heart" size={26} style={{ color: '#C5C5C5' }} />
                     </TouchableOpacity>
                 </View>
@@ -32,13 +42,13 @@ export default class ChiTietSanPham extends React.Component {
         const userId = await AsyncStorage.getItem('userId');
         console.log(userId);
         try {
-            
-          await axios.post(`${API_ADD_GIOHANG_USER}/${userId}/${data.idSP}`);
-            console.warn('Sản phẩm đã được thêm vào giỏ hàng');
-          } catch (error) {
-            console.error('Lỗi thêm sản phẩm vào giỏ hàng');
-          }
-      }
+
+            await axios.post(`${API_ADD_GIOHANG_USER}/${userId}/${data.idSP}`);
+            ToastAndroid.show('Đã thêm vào giỏ hàng ✓', ToastAndroid.SHORT);
+        } catch (error) {
+            ToastAndroid.show('Lỗi bất định !', ToastAndroid.SHORT);
+        }
+    }
     render() {
         const data = this.props.route.params.data;
         console.log(data)
@@ -126,7 +136,7 @@ const styles = StyleSheet.create({
     kihieu: {
         fontSize: 20,
         color: '#F26C42',
-        textDecorationLine:'underline'
+        textDecorationLine: 'underline'
     },
     mota: {
         fontSize: 15,
@@ -159,19 +169,19 @@ const styles = StyleSheet.create({
     },
     pay: {
         fontSize: 20,
-        textAlign: 'center', 
-        color:'white'
+        textAlign: 'center',
+        color: 'white'
     },
     press_cart: {
         backgroundColor: '#0A9674',
         width: '40%',
         alignItems: 'center',
-        justifyContent: 'center', 
+        justifyContent: 'center',
     },
     cart: {
         fontSize: 15,
-        textAlign: 'center', 
-        marginTop:-5
+        textAlign: 'center',
+        marginTop: -5
     },
 
 })

@@ -1,19 +1,19 @@
 import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ImageBackground , Image} from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, ImageBackground, Image,ToastAndroid } from 'react-native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { API_UPDATE_USER_ID } from '../helpers/api';
 
 export default class EditUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userId: this.props.route.params.data,
       name: '',
-      username: '',
-      password: '',
       address: '',
       phone: '',
       avatar: '',
+      isChanged: false, // Thêm biến isChanged
     };
   }
 
@@ -21,139 +21,130 @@ export default class EditUser extends React.Component {
     this.fetchUserData();
   }
 
-  async fetchUserData() {
+  fetchUserData() {
     try {
-      const response = await axios.get(`http://192.168.1.8:3000/edit_user/${this.state.data}`);
-      const data = response.data;
+      const { data } = this.props.route.params;
       this.setState({
-        name: data.ten,
-        username: data.tentaikhoan,
-        password: data.pass,
-        address: data.dia_chi,
-        phone: data.sdt,
-        avatar: data.avatar,
+        name: data[0].ten,
+        address: data[0].dia_chi,
+        phone: data[0].sdt,
+        avatar: data[0].avatar,
       });
     } catch (error) {
       console.error(error);
     }
   }
 
-  handleSave = async () => {
-    const { name, username, password, address, phone, avatar } = this.state;
+  handleInputChange = (key, value) => {
+    this.setState({
+      [key]: value,
+      isChanged: true, 
+    });
+  };
 
-    // Gửi dữ liệu đã chỉnh sửa lên server để lưu thay đổi
+  handleSave = async () => {
+    const { name, address, phone, avatar, isChanged } = this.state;
+    const { data } = this.props.route.params;
+
     try {
-      await axios.post(`http://192.168.1.8:3000/edit_user/${this.state.userId}`, {
-        ten: name,
-        tentaikhoan: username,
-        pass: password,
-        dia_chi: address,
-        sdt: phone,
-        avatar: avatar,
-      });
-      // Thông báo thành công và điều hướng về màn hình trước đó
-      alert('Cập nhật thành công');
+      if (isChanged) { 
+        const userId = await AsyncStorage.getItem('userId');
+        const updatedUser = {
+          ten: name,
+          dia_chi: address,
+          sdt: phone,
+          avatar: avatar,
+        };
+
+        await axios.post(`${API_UPDATE_USER_ID}/${userId}`, updatedUser);
+        ToastAndroid.show('Cập nhật thành công ✓', ToastAndroid.SHORT); 
+      } else {
+        
+      }
+
       this.props.navigation.goBack();
     } catch (error) {
       console.error(error);
-      // Thông báo lỗi nếu có lỗi xảy ra
       alert('Đã xảy ra lỗi');
     }
   };
 
   render() {
-  return (
-    <ImageBackground source={require('../images/backgroup.png')} style={styles.backgroundImage}>
-      <View style={styles.container}>
-        <View style={styles.logoContainer}>
-          <Image source={require('../images/logo1.png')} style={styles.logo} />
-        </View>
-        <View style={styles.formContainer}>
-          <View style={styles.inputContainer}>
-            <View style={styles.iconContainer}>
-              <Icon name="user" size={25} color="gray" style={styles.icon} />
-            </View>
-            <TextInput
-              style={styles.input}
-              value={this.state.name}
-              onChangeText={(text) => this.setState({ name: text })}
-              placeholder="Họ và tên"
-              placeholderTextColor="gray"
-              onSubmitEditing={() => this.passwordInput.focus()}
-              returnKeyType="next"
-            />
+    return (
+      <ImageBackground source={require('../images/backgroup.png')} style={styles.backgroundImage}>
+        <View style={styles.container}>
+          <View style={styles.logoContainer}>
+            <Image source={require('../images/logo1.png')} style={styles.logo} />
           </View>
-          <View style={styles.inputContainer}>
-            <View style={styles.iconContainer}>
-              <Icon name="lock" size={25} color="gray" style={styles.icon} />
+          <View style={styles.formContainer}>
+            <View style={styles.inputContainer}>
+              <View style={styles.iconContainer}>
+                <Icon name="user" size={25} color="gray" style={styles.icon} />
+              </View>
+              <TextInput
+                style={styles.input}
+                value={this.state.name}
+                onChangeText={(text) => this.handleInputChange('name', text)}
+                placeholder="Họ và tên"
+                placeholderTextColor="gray"
+                onSubmitEditing={() => this.passwordInput.focus()}
+                returnKeyType="next"
+              />
             </View>
-            <TextInput
-              style={styles.input}
-              secureTextEntry={true}
-              value={this.state.password}
-              onChangeText={(text) => this.setState({ password: text })}
-              placeholder="Mật khẩu"
-              placeholderTextColor="gray"
-              ref={(input) => (this.passwordInput = input)}
-              onSubmitEditing={() => this.addressInput.focus()}
-              returnKeyType="next"
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <View style={styles.iconContainer}>
-              <Icon name="home" size={25} color="gray" style={styles.icon} />
+            <View style={styles.inputContainer}>
+              <View style={styles.iconContainer}>
+                <Icon name="home" size={25} color="gray" style={styles.icon} />
+              </View>
+              <TextInput
+                style={styles.input}
+                value={this.state.address}
+                onChangeText={(text) => this.handleInputChange('address', text)}
+                placeholder="Địa chỉ"
+                placeholderTextColor="gray"
+                ref={(input) => (this.addressInput = input)}
+                onSubmitEditing={() => this.phoneInput.focus()}
+                returnKeyType="next"
+              />
             </View>
-            <TextInput
-              style={styles.input}
-              value={this.state.address}
-              onChangeText={(text) => this.setState({ address: text })}
-              placeholder="Địa chỉ"
-              placeholderTextColor="gray"
-              ref={(input) => (this.addressInput = input)}
-              onSubmitEditing={() => this.phoneInput.focus()}
-              returnKeyType="next"
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <View style={styles.iconContainer}>
-              <Icon name="phone" size={25} color="gray" style={styles.icon} />
+            <View style={styles.inputContainer}>
+              <View style={styles.iconContainer}>
+                <Icon name="phone" size={25} color="gray" style={styles.icon} />
+              </View>
+              <TextInput
+                style={styles.input}
+                value={this.state.phone}
+                onChangeText={(text) => this.handleInputChange('phone', text)}
+                placeholder="Số điện thoại"
+                placeholderTextColor="gray"
+                ref={(input) => (this.phoneInput = input)}
+                onSubmitEditing={() => this.avatarInput.focus()}
+                returnKeyType="next"
+              />
             </View>
-            <TextInput
-              style={styles.input}
-              value={this.state.phone}
-              onChangeText={(text) => this.setState({ phone: text })}
-              placeholder="Số điện thoại"
-              placeholderTextColor="gray"
-              ref={(input) => (this.phoneInput = input)}
-              onSubmitEditing={() => this.avatarInput.focus()}
-              returnKeyType="next"
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <View style={styles.iconContainer}>
-              <Icon name="user" size={25} color="gray" style={styles.icon} />
+            <View style={styles.inputContainer}>
+              <View style={styles.iconContainer}>
+                <Icon name="user" size={25} color="gray" style={styles.icon} />
+              </View>
+              <TextInput
+                style={styles.input}
+                value={this.state.avatar}
+                onChangeText={(text) => this.handleInputChange('avatar', text)}
+                placeholder="Avatar"
+                placeholderTextColor="gray"
+                ref={(input) => (this.avatarInput = input)}
+                onSubmitEditing={this.handleSave}
+                returnKeyType="done"
+              />
             </View>
-            <TextInput
-              style={styles.input}
-              value={this.state.avatar}
-              onChangeText={(text) => this.setState({ avatar: text })}
-              placeholder="Avatar"
-              placeholderTextColor="gray"
-              ref={(input) => (this.avatarInput = input)}
-              onSubmitEditing={this.handleSave}
-              returnKeyType="done"
-            />
-          </View>
-          <View style={styles.buttonContainer}>
-            <Button title="Lưu" onPress={this.handleSave} />
+            <View style={styles.buttonContainer}>
+              <Button title="Lưu" onPress={this.handleSave} />
+            </View>
           </View>
         </View>
-      </View>
-    </ImageBackground>
-  );
+      </ImageBackground>
+    );
+  }
 }
-
-}  
 
 const styles = StyleSheet.create({
   container: {
