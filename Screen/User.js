@@ -4,13 +4,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_LIST_USER_ID } from "../helpers/api";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
-
 export default class User extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       userId: null,
       user: null,
+      diachi: null,
     };
     this.handlePressLogin = this.handlePressLogin.bind(this)
     this.handlePressEdit = this.handlePressEdit.bind(this)
@@ -19,8 +19,14 @@ export default class User extends React.Component {
 
   componentDidMount() {
     this.getUserData();
+    this.focusListener = this.props.navigation.addListener('focus', () => {
+      this.getUserData();
+    });
+    
   }
-
+  componentWillUnmount() {
+    this.focusListener(); // Hủy bỏ listener khi component bị unmount
+  }
   async getUserData() {
     try {
       const userId = await AsyncStorage.getItem('userId');
@@ -37,7 +43,7 @@ export default class User extends React.Component {
     try {
       const response = await axios.get(`${API_LIST_USER_ID}/${userId}`);
       const data = response.data;
-      this.setState({ user: data.products }); // Sửa thành user: data.products
+      this.setState({ user: data.products }); 
     } catch (error) {
       console.error(error);
     }
@@ -55,7 +61,7 @@ export default class User extends React.Component {
   };
   
   handlePressEdit = () => {
-      this.props.navigation.navigate('EditUser',{data: this.state.userId});
+      this.props.navigation.navigate('EditUser',{data: this.state.user});
   };
 
   handlePressCart =()=>{
@@ -64,9 +70,10 @@ export default class User extends React.Component {
 
   render() {
     const { user } = this.state;
-
+    
     return (
       <View style={styles.container}>
+
         <Text style={styles.title}>Tài khoản của tôi</Text>
         <View style={styles.contentContainer}>
         {user ? (
@@ -140,8 +147,9 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 50,
-    marginTop: 50,
-    marginLeft: 10
+    marginLeft: 10,
+    alignSelf:'center',
+    paddingTop:20
   },
   avatar: {
     width: 100,
@@ -180,11 +188,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   logoutButton: {
-    backgroundColor: 'black',
+    backgroundColor: 'orange',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
-    marginTop: 100,
     alignSelf: 'center',
     width: 300,
     height: 50

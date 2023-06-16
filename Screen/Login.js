@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Image} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Image, ToastAndroid } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
-import {API_LOGIN} from '../helpers/api';
+import { API_LOGIN } from '../helpers/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export default class LoginScreen extends Component {
   constructor(props) {
     super(props);
@@ -11,6 +12,7 @@ export default class LoginScreen extends Component {
       username: '',
       password: '',
       userList: [],
+      passwordVisible: false,
     };
   }
 
@@ -36,29 +38,57 @@ export default class LoginScreen extends Component {
   handleLogin() {
     const { username, password, userList } = this.state;
     const user = userList.find((user) => user.tentaikhoan === username && user.pass === password);
-    if (user) {
+    const usernameExists = userList.some((user) => user.tentaikhoan === username);
+    const passwordExists = userList.some((user) => user.pass === password);
+
+    if (username.trim().length === 0) {
+      ToastAndroid.show('Không để rỗng!', ToastAndroid.SHORT);
+      return;
+    } else if (!usernameExists) {
+      ToastAndroid.show('Tài khoản không tồn tại!', ToastAndroid.SHORT);
+    }
+    else if (!passwordExists) {
+      ToastAndroid.show('Mật khẩu không đúng!', ToastAndroid.SHORT);
+    }
+    else if (!user) {
+      ToastAndroid.show('Tài khoản hoặc mật khẩu không chính xác!', ToastAndroid.SHORT);
+    } else {
       const userId = user.id.toString();
       AsyncStorage.setItem('userId', userId).then(() => {
         this.props.navigation.reset({
           index: 0,
           routes: [{ name: 'Home' }],
         });
-        console.log('Login successful');
+        ToastAndroid.show('Chúc mừng bạn đăng nhập thành công ✓', ToastAndroid.SHORT);
       });
-    } else {
-      console.log('....Loading');
     }
   }
-  
+
+
   handleRegister() {
     this.props.navigation.navigate('Register');
   }
+
+  togglePasswordVisibility = () => {
+    this.setState((prevState) => ({
+      passwordVisible: !prevState.passwordVisible,
+    }));
+  };
+
+  handlePasswordSubmit = () => {
+    this.setState({
+      password: this.state.password + '\n',
+    });
+  };
+
   render() {
+    const { passwordVisible } = this.state;
+
     return (
       <ImageBackground source={require('../images/backgroup.png')} style={styles.backgroundImage}>
         <View style={styles.logoContainer}>
-            <Image source={require('../images/logo1.png')} style={styles.logo} />
-          </View>
+          <Image source={require('../images/logo1.png')} style={styles.logo} />
+        </View>
         <View style={styles.container}>
           <View style={styles.formContainer}>
             <View style={styles.inputContainer}>
@@ -71,6 +101,8 @@ export default class LoginScreen extends Component {
                 value={this.state.username}
                 placeholder="Username"
                 placeholderTextColor="gray"
+                returnKeyType="next"
+                onSubmitEditing={() => this.passwordInput.focus()}
               />
             </View>
             <View style={styles.inputContainer}>
@@ -83,8 +115,22 @@ export default class LoginScreen extends Component {
                 value={this.state.password}
                 placeholder="Password"
                 placeholderTextColor="gray"
-                secureTextEntry
+                secureTextEntry={!passwordVisible}
+                returnKeyType="done"
+                ref={(input) => (this.passwordInput = input)}
               />
+              <TouchableOpacity
+                style={styles.iconContainer}
+                onPress={this.togglePasswordVisibility}
+              >
+                <Icon
+                  name={this.state.password.length > 0 ? (passwordVisible ? 'eye-slash' : 'eye') : ''}
+                  size={20}
+                  color="blue"
+                  style={styles.icon}
+
+                />
+              </TouchableOpacity>
             </View>
 
             <TouchableOpacity style={styles.registerButton} onPress={() => this.handleRegister()}>
@@ -115,12 +161,11 @@ const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
     marginTop: 70,
-    paddingBottom:10
-
+    paddingBottom: 10,
   },
   logo: {
     width: 110,
-    height: 180
+    height: 180,
   },
   formContainer: {
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
@@ -144,6 +189,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     alignSelf: 'center',
+
   },
   input: {
     flex: 1,
@@ -171,5 +217,5 @@ const styles = StyleSheet.create({
     color: 'blue',
     fontSize: 16,
     fontWeight: 'bold',
-  },  
+  },
 });

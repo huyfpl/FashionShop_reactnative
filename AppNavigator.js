@@ -84,7 +84,9 @@ export default function AppNavigator() {
             <Stack.Screen name="Splash" component={Splash}/>
                 <Stack.Screen name="Login" component={Login}/>
                 <Stack.Screen name="Register" component={Register}/>
-                <Stack.Screen name="EditUser" component={EditUser}/>
+                <Stack.Screen name="EditUser" component={EditUser}options={{
+                    title: 'Cập nhật thông tin'
+                }} />
                 <Stack.Screen name="Home" component={TabNavigator} options={{ headerShown: false }}/>
                 <Stack.Screen name="ChiTietSanPham" component={ChiTietSanPham} />
             </Stack.Navigator>

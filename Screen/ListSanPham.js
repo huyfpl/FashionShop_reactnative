@@ -77,6 +77,7 @@ export default class ListSanPham extends React.Component {
             <RefreshControl
               refreshing={this.state.refreshing}
               onRefresh={this.handleRefresh}
+              colors={['#9Bd35A', '#689F38']}
             />
           }
         >

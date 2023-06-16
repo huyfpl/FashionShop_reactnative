@@ -1,30 +1,34 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
-import { Button } from "react-native-paper";
+import { View, Text, Image, StyleSheet, ScrollView,ToastAndroid } from "react-native";
+import { Button, Checkbox } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_LISTGIOHANG_USER_ID, API_TANG_SOLUONG_GIOHANG, API_GIAM_SOLUONG_GIOHANG} from "../helpers/api";
+import { API_LISTGIOHANG_USER_ID, API_TANG_SOLUONG_GIOHANG, API_GIAM_SOLUONG_GIOHANG } from "../helpers/api";
 import axios from "axios";
 
 export default class Cart extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      userId: null,
-      giohang: null,
-      danhMuc: {},
-      selectedCategory: null,
-      tongTien: 0,
-    };
-  }
+  state = {
+    userId: null,
+    giohang: [],
+    danhMuc: {},
+    selectedItems: {},
+    tongTien: 0,
+  };
 
   componentDidMount() {
     this.getUserData();
+    this.focusListener = this.props.navigation.addListener('focus', () => {
+      this.getUserData();
+    });
+    
+  }
+  componentWillUnmount() {
+    this.focusListener(); 
   }
 
   async getUserData() {
     try {
       const userId = await AsyncStorage.getItem("userId");
-      this.setState({ userId: userId }, () => {
+      this.setState({ userId }, () => {
         this.fetchUserData();
       });
     } catch (error) {
@@ -36,146 +40,176 @@ export default class Cart extends React.Component {
     const { userId } = this.state;
     try {
       const response = await axios.get(`${API_LISTGIOHANG_USER_ID}/${userId}`);
-      const data = response.data;
-      const giohang = data.products;
+      const giohang = response.data.products;
       const danhMuc = {};
 
       giohang.forEach((item) => {
-        if (!danhMuc[item.ten_danhmuc]) {
-          danhMuc[item.ten_danhmuc] = [];
+        const category = item.ten_danhmuc;
+        if (!danhMuc[category]) {
+          danhMuc[category] = [];
         }
-        danhMuc[item.ten_danhmuc].push(item);
+        danhMuc[category].push(item);
       });
 
-      let tongTien = 0;
-      giohang.forEach((item) => {
-        tongTien += item.giaBan * item.soluong;
-      });
-
-      this.setState({ giohang, danhMuc, tongTien });
+      this.setState({ giohang, danhMuc });
+      this.calculateTotal();
     } catch (error) {
       console.error(error);
     }
   }
 
-  handleCategoryPress = (categoryName) => {
-    this.setState({ selectedCategory: categoryName });
+  handleCategoryPress = (categoryName, itemId) => {
+    this.setState((prevState) => {
+      const { selectedItems } = prevState;
+      const categoryItems = selectedItems[categoryName] || {};
+      const isSelected = categoryItems[itemId];
+
+      return {
+        selectedItems: {
+          ...selectedItems,
+          [categoryName]: {
+            ...categoryItems,
+            [itemId]: !isSelected,
+          },
+        },
+      };
+    }, this.calculateTotal);
   };
 
   handleIncreaseQuantity = async (idSP, soluong) => {
-    const userId = await AsyncStorage.getItem('userId');
+    const userId = await AsyncStorage.getItem("userId");
     try {
-      const response = await axios.post(`${API_TANG_SOLUONG_GIOHANG}/${userId}/${idSP}`);
+      await axios.post(`${API_TANG_SOLUONG_GIOHANG}/${userId}/${idSP}`);
       this.fetchUserData();
     } catch (error) {
       console.error(error);
     }
   };
-  
+
   handleDecreaseQuantity = async (idSP, soluong) => {
-    const userId = await AsyncStorage.getItem('userId');
+    const userId = await AsyncStorage.getItem("userId");
     try {
-      const response = await axios.post(`${API_GIAM_SOLUONG_GIOHANG}/${userId}/${idSP}`);
+      await axios.post(`${API_GIAM_SOLUONG_GIOHANG}/${userId}/${idSP}`);
       this.fetchUserData();
     } catch (error) {
       console.error(error);
     }
-  };  
-  
+  };
+
+  handleSelectAll = (categoryName) => {
+    this.setState((prevState) => {
+      const { selectedItems, danhMuc } = prevState;
+      const categoryItems = selectedItems[categoryName] || {};
+      const allSelected = Object.keys(categoryItems).length === danhMuc[categoryName].length;
+
+      let updatedCategoryItems = {};
+      if (!allSelected) {
+        // Select all items
+        danhMuc[categoryName].forEach((item) => {
+          updatedCategoryItems[item.idSP] = true;
+        });
+      }
+
+      return {
+        selectedItems: {
+          ...selectedItems,
+          [categoryName]: updatedCategoryItems,
+        },
+      };
+    }, this.calculateTotal);
+  };
 
   calculateTotal = () => {
-    const { giohang } = this.state;
-    let tongTien = 0;
-    giohang.forEach((item) => {
-      tongTien += item.giaBan * item.soluong;
+    const { giohang, selectedItems } = this.state;
+    let total = 0;
+
+    Object.keys(selectedItems).forEach((categoryName) => {
+      const items = selectedItems[categoryName];
+      giohang.forEach((item) => {
+        if (item.ten_danhmuc === categoryName && items[item.idSP]) {
+          total += item.giaBan * item.soluong;
+        }
+      });
     });
-    this.setState({ tongTien });
+
+    this.setState({ tongTien: total });
   };
 
-  renderProductItem = ({ item, index }) => {
-    return (
-      <View style={styles.productItem}>
-        <View style={styles.productInfo}>
-          <Image source={{ uri: item.anhSP }} style={styles.productImage} />
-          <View style={styles.productDetails}>
-            <Text style={styles.productName}>{item.tenSP}</Text>
-            <Text style={styles.giaBan}>Giá: {item.giaBan}</Text>
-            <View style={styles.quantityContainer}>
-              <Button
-                icon="minus"
-                mode="outlined"
-                onPress={() => this.handleDecreaseQuantity(item.idSP, item.soluong)}
-                style={styles.quantityButton}
-              />
-              <Text style={styles.quantityText}>{item.soluong}</Text>
-              <Button
-                icon="plus"
-                mode="outlined"
-                onPress={() => this.handleIncreaseQuantity(item.idSP, item.soluong)}
-                style={styles.quantityButton}
-              />
-            </View>
-          </View>
-        </View>
-      </View>
-    );
+  handlePayment = (value) => {
+    if(value==0){
+      console.warn("chưa có đơn hàng nào")
+    }
+    else{
+      console.warn("ấy ấy chưa làm")
+    }
+   
   };
 
   render() {
-    const { giohang, tongTien } = this.state;
+    const { giohang, tongTien, danhMuc, selectedItems } = this.state;
+    const allSelected = (categoryName) => {
+      const categoryItems = selectedItems[categoryName] || {};
+      return Object.keys(categoryItems).length === danhMuc[categoryName].length;
+    };
     return (
       <View style={styles.container}>
         <ScrollView>
-          {giohang && giohang.length > 0 ? (
-            giohang.map((item, index) => (
-              <View key={index} style={styles.productItem}>
-                <View style={styles.productInfo}>
-                  <Image
-                    source={{ uri: item.anhSP }}
-                    style={styles.productImage}
-                  />
-                  <View style={styles.productDetails}>
-                    <Text style={styles.productName}>{item.tenSP}</Text>
-                    <Text style={styles.giaBan}>Giá: {item.giaBan}</Text>
-                    <View style={styles.quantityContainer}>
-                      <Button
-                        icon="minus"
-                        mode="outlined"
-                        onPress={() =>
-                          this.handleDecreaseQuantity(item.idSP, item.soluong)
-                        }
-                        style={styles.quantityButton}
-                      />
-                      <Text style={styles.quantityText}>{item.soluong}</Text>
-                      <Button
-                        icon="plus"
-                        mode="outlined"
-                        onPress={() =>
-                          this.handleIncreaseQuantity(item.idSP, item.soluong)
-                        }
-                        style={styles.quantityButton}
-                      />
+          {Object.keys(danhMuc).map((categoryName) => (
+            <View key={categoryName} style={styles.all}>
+              <View style={styles.categoryHeader}>
+                <Checkbox
+                  status={allSelected(categoryName) ? "checked" : "unchecked"}
+                  onPress={() => this.handleSelectAll(categoryName)}
+                  style={styles.selectAllButton}
+                  color="#3399ff"
+                />
+                <Text style={styles.categoryTitle}>{categoryName}</Text>
+              </View>
+              {danhMuc[categoryName].map((item) => (
+                <View key={item.idSP} style={styles.productItem}>
+                  <View style={styles.productInfo}>
+                    <Checkbox
+                      status={selectedItems[categoryName]?.[item.idSP] ? "checked" : "unchecked"}
+                      onPress={() => this.handleCategoryPress(categoryName, item.idSP)}
+                      color="#3399ff"
+                    />
+                    <Image source={{ uri: item.anhSP }} style={styles.productImage} />
+                    <View style={styles.productDetails}>
+                      <Text style={styles.productName}>{item.tenSP}</Text>
+                      <Text style={styles.giaBan}>Giá: {item.giaBan}</Text>
+                      <View style={styles.quantityContainer}>
+                        <Button
+                          icon="minus"
+                          onPress={() => this.handleDecreaseQuantity(item.idSP, item.soluong)}
+                          style={styles.quantityButton}
+                        >
+                        </Button>
+                        <Text style={styles.quantityText}>{item.soluong}</Text>
+                        <Button
+                          icon="plus"
+                          onPress={() => this.handleIncreaseQuantity(item.idSP, item.soluong)}
+                          style={styles.quantityButton}
+                        >
+
+                        </Button>
+                      </View>
                     </View>
                   </View>
                 </View>
-              </View>
-            ))
-          ) : (
-            <Text style={styles.title}>Không có sản phẩm</Text>
-          )}
+              ))}
+            </View>
+          ))}
         </ScrollView>
 
-        {/* Hiển thị tổng tiền và nút thanh toán */}
         <View style={styles.bottomContainer}>
           <View style={styles.totalTextContainer}>
-            <Text style={styles.totalText}>Tổng tiền: {tongTien}</Text>
+            <Text style={styles.totalText}>Tổng thiệt hại: <Text style={styles.tongtien}>{tongTien}</Text> <Text style={styles.kihieutongtien}>vnđ</Text></Text>
           </View>
           <Button
-            mode="contained"
-            onPress={this.handlePayment}
+            onPress={()=>this.handlePayment(tongTien)}
             style={styles.paymentButton}
           >
-            Thanh toán
+            <Text style={styles.paymentButtonText}>Thanh toán</Text>
           </Button>
         </View>
       </View>
@@ -186,18 +220,30 @@ export default class Cart extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 10,
     backgroundColor: "#fff",
   },
-  title: {
+  categoryHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    
+    width: "100%",
+    backgroundColor: '#E0E0E0',
+   
+    marginTop:10
+  },
+  categoryTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 10,
+  },
+  selectAllButton: {
+    marginLeft: 10,
   },
   productItem: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
+    
+    backgroundColor:'#F9F9F9'
   },
   productInfo: {
     flexDirection: "row",
@@ -222,34 +268,44 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   quantityButton: {
-    marginHorizontal: 5,
-    borderColor: "#000",
     borderRadius: 4,
   },
   quantityText: {
     fontSize: 16,
     fontWeight: "bold",
-    paddingHorizontal: 8,
     color: "red",
   },
   totalTextContainer: {
     marginRight: 20,
   },
   totalText: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: "bold",
-    color: "#ee4d2d", // Shopee's primary color
+    color: "#ee4d2d",
+
+    height:20
+  },
+  tongtien:{
+   fontSize:12,
+   color:'#606060',
   },
   bottomContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 10,
   },
   paymentButton: {
-    backgroundColor: "#ee4d2d", // Shopee's primary color
+    height: 40,
     paddingHorizontal: 20,
-    paddingVertical: 10,
     borderRadius: 5,
+    justifyContent: "center", 
+    alignItems: "center", 
+    backgroundColor:'red'
+  },
+  paymentButtonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#fff",
   },
 });

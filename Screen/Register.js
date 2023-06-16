@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Image ,ToastAndroid} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import { API_SIGNUP } from '../helpers/api';
@@ -30,8 +30,8 @@ export default class RegisterScreen extends Component {
         avatar: avatar,
       })
       .then((response) => {
-        this.props.navigation.navigate('Home');
-        console.log(response.data);
+        this.props.navigation.navigate('Login',{username: username, password:password});
+        ToastAndroid.show('Chúc mừng bạn đã đăng kí thành công ✓'+username, ToastAndroid.SHORT);
       })
       .catch((error) => {
         console.log(error);
@@ -47,7 +47,7 @@ export default class RegisterScreen extends Component {
           </View>
           <View style={styles.formContainer}>
             <View style={styles.inputContainer}>
-              <Icon name="user" size={20} color="gray" style={styles.icon} />
+              <Icon name="book" size={20} color="gray" style={styles.icon} />
               <TextInput
                 style={styles.input}
                 onChangeText={(text) => this.setState({ ten: text })}
@@ -59,7 +59,7 @@ export default class RegisterScreen extends Component {
               />
             </View>
             <View style={styles.inputContainer}>
-              <Icon name="lock" size={20} color="gray" style={styles.icon} />
+              <Icon name="user" size={20} color="gray" style={styles.icon} />
               <TextInput
                 style={styles.input}
                 onChangeText={(text) => this.setState({ username: text })}
@@ -72,7 +72,7 @@ export default class RegisterScreen extends Component {
               />
             </View>
             <View style={styles.inputContainer}>
-              <Icon name="phone" size={20} color="gray" style={styles.icon} />
+              <Icon name="lock" size={20} color="gray" style={styles.icon} />
               <TextInput
                 style={styles.input}
                 onChangeText={(text) => this.setState({ password: text })}
@@ -86,7 +86,7 @@ export default class RegisterScreen extends Component {
               />
             </View>
             <View style={styles.inputContainer}>
-              <Icon name="pencil" size={20} color="gray" style={styles.icon} />
+              <Icon name="phone" size={20} color="gray" style={styles.icon} />
               <TextInput
                 style={styles.input}
                 onChangeText={(text) => this.setState({ sdt: text })}
