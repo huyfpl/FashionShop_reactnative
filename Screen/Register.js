@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: 200,
-    height: 100,
+    height: 160,
     resizeMode: 'contain',
   },
   formContainer: {
@@ -167,5 +167,6 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     justifyContent: 'center',
     alignItems: 'center',
+    height:'110%'
   },
 });

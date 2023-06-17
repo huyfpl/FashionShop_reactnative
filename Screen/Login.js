@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
     resizeMode: 'cover',
-    height: 750,
+    height: "110%",
   },
   container: {
     flex: 1,

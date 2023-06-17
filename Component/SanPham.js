@@ -50,11 +50,12 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   container: {
+   
     marginBottom: 10,
     borderRadius: 10,
     backgroundColor: "#FFFBF9",
-    borderWidth: 1,
-    width: 165,
+ 
+    width: 170,
     flex: 1
   },
  
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   img: {
-    height: 130,
+    height: 135,
     width:130,
     borderRadius: 10,
     margin: 10,

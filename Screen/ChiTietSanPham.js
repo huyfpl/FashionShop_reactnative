@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     },
     pay_cart: {
         flexDirection: 'row',
-        height: 40
+        height: 50
     },
     press_pay: {
         backgroundColor: '#FF4D15',

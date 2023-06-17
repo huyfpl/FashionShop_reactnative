@@ -14,63 +14,97 @@ import Login from './Screen/Login';
 import Register from './Screen/Register';
 import EditUser from './Screen/EditUser';
 import Splash from './Screen/Splash';
-import { View } from 'react-native';
-
+import SearchResults from './Screen/SearchResults';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-import { TouchableOpacity } from 'react-native';
+import * as Animatable from 'react-native-animatable';
+import React, { useRef, useEffect } from 'react';
+import { View, TouchableWithoutFeedback } from 'react-native';
+
+function TabButton({ onPress, accessibilityState, children }) {
+    const viewRef = useRef(null);
+
+    useEffect(() => {
+        if (accessibilityState.selected) {
+            viewRef.current.animate({ 0: { scale: .5,rotate:'0deg' }, 1: { scale: 1.5,rotate:'360deg'  } });
+        } else {
+            viewRef.current.animate({0: { scale: .5,rotate:'360deg' }, 1: { scale: 1.5,rotate:'0deg'  } });
+        }
+    }, [accessibilityState.selected]);
+
+    return (
+        <TouchableWithoutFeedback onPress={onPress} style={{ flex: 1 }}>
+            <Animatable.View ref={viewRef} duration={500} style={{ flex: 1 }}>
+                {children}
+            </Animatable.View>
+        </TouchableWithoutFeedback>
+    );
+}
 
 function TabNavigator() {
     return (
         <Tab.Navigator
-            initialRouteName="Home"
-            tabBarOptions={{
-                activeTintColor: '#FF4D15',
-                inactiveTintColor: '#C5C5C5',
-                labelStyle: {
-                    fontSize: 14,
-                    fontWeight: 'bold',
-                },
+            screenOptions={{
+               
+                tabBarStyle: {
+                    height: 50,
+                    position: 'absolute',
+                    bottom: 10,
+                    left: 10,
+                    right: 10,
+                    borderRadius: 50
+                }
             }}
         >
             <Tab.Screen
                 name="Home"
                 component={ListSanPham}
                 options={{
-                    title: 'Home',
+                    
+                    tabBarShowLabel: false,
+                    title: 'Chào mừng bạn',
                     tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons name="home" color={color} size={26} />
+                        <MaterialCommunityIcons name="home" color={color} size={20} />
                     ),
+                    tabBarButton: (props) => <TabButton {...props} />
                 }}
+
             />
             <Tab.Screen
                 name="DanhMuc"
                 component={DanhMuc}
                 options={{
+                    tabBarShowLabel: false,
                     title: 'Danh Mục',
                     tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons name="folder" color={color} size={26} />
+                        <MaterialCommunityIcons name="folder" color={color} size={20} />
                     ),
+                    tabBarButton: (props) => <TabButton {...props} />
                 }}
             />
             <Tab.Screen
                 name="Cart"
                 component={Cart}
                 options={{
+                
+                    tabBarShowLabel: false,
                     title: 'Cart',
                     tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons name="cart" color={color} size={26} />
+                        <MaterialCommunityIcons name="cart" color={color} size={20} />
                     ),
+                    tabBarButton: (props) => <TabButton {...props} />
                 }}
             />
             <Tab.Screen
                 name="User"
                 component={User}
                 options={{
+                    tabBarShowLabel: false,
                     title: 'User',
                     tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons name="account" color={color} size={26} />
+                        <MaterialCommunityIcons name="account" color={color} size={20} />
                     ),
+                    tabBarButton: (props) => <TabButton {...props} />
                 }}
             />
         </Tab.Navigator>
@@ -81,14 +115,15 @@ export default function AppNavigator() {
     return (
         <NavigationContainer>
             <Stack.Navigator initialRouteName='Splash'>
-            <Stack.Screen name="Splash" component={Splash}/>
-                <Stack.Screen name="Login" component={Login}/>
-                <Stack.Screen name="Register" component={Register}/>
-                <Stack.Screen name="EditUser" component={EditUser}options={{
+                <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }}  />
+                <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
+                <Stack.Screen name="Register" component={Register} />
+                <Stack.Screen name="EditUser" component={EditUser} options={{
                     title: 'Cập nhật thông tin'
                 }} />
-                <Stack.Screen name="Home" component={TabNavigator} options={{ headerShown: false }}/>
+                <Stack.Screen name="Home" component={TabNavigator} options={{ headerShown: false }} />
                 <Stack.Screen name="ChiTietSanPham" component={ChiTietSanPham} />
+                <Stack.Screen name="SearchResults" component={SearchResults} />
             </Stack.Navigator>
         </NavigationContainer>
     );
