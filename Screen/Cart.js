@@ -260,7 +260,7 @@ export default class Cart extends React.Component {
         <View style={styles.bottomContainer}>
           <View style={[styles.totalTextContainer, { flex: 1 }]}>
             <Text style={styles.totalText}>
-              Tổng thiệt hại: <Text style={styles.tongtien}>{tongTien.toFixed(0).slice(0, 5)+"k"}</Text> <Text style={styles.kihieutongtien}>vnđ</Text>
+              Tổng thiệt hại: <Text style={styles.tongtien}>{tongTien.toFixed(0).slice(0, 5)+"k"}</Text> <Text style={styles.kihieutongtien}>VNĐ</Text>
             </Text>
           </View>
           <Button
