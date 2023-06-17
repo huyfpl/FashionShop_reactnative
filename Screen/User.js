@@ -127,7 +127,7 @@ export default class User extends React.Component {
               <Text style={styles.buttonText}>Cập nhật lại thông tin</Text>
             </TouchableOpacity>
             <View style={styles.iconContainerChevron}>
-              <Icon name="edit" size={25} color="gray" />
+              <Icon name="chevron-right" size={25} color="gray" />
             </View>
           </View>
           <View style={styles.inputContainer}>
