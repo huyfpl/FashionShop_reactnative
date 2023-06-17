@@ -1,5 +1,16 @@
 import React, { Component } from "react";
-import { View, Text, TouchableWithoutFeedback, StyleSheet, Image, FlatList, Modal, ActivityIndicator, RefreshControl } from "react-native";
+import {
+  View,
+  Text,
+  TouchableWithoutFeedback,
+  StyleSheet,
+  Image,
+  FlatList,
+  Modal,
+  ActivityIndicator,
+  RefreshControl,
+  ScrollView,
+} from "react-native";
 import axios from "axios";
 import { API_LIST_DANHMUC, API_LIST_SANPHAM_DANHMUC } from "../helpers/api";
 import SanPham from "../Component/SanPham";
@@ -12,14 +23,14 @@ export default class DanhMuc extends Component {
       selectedDanhMuc: null,
       danhSachSanPham: [],
       loading: false,
-      refreshing: false // Thêm trạng thái refreshing
+      refreshing: false,
     };
     this.handlePress = this.handlePress.bind(this);
   }
 
   componentDidMount() {
     this.fetchDanhMucList();
-    this.props.navigation.addListener('focus', this.componentDidFocus);
+    this.props.navigation.addListener("focus", this.componentDidFocus);
   }
 
   fetchDanhMucList = async () => {
@@ -27,18 +38,18 @@ export default class DanhMuc extends Component {
       const response = await axios.get(API_LIST_DANHMUC);
       const data = response.data;
       let danhMucList = data.danhmuc;
-  
+
       // Kiểm tra nếu số lượng danh mục là số lẻ, thêm một phần tử ảo vào danh sách để đảm bảo số lượng chẵn
       if (danhMucList.length % 2 !== 0) {
         danhMucList.push({ id_danhmuc: -1, ten_danhmuc: "", anh_danhmuc: "" });
       }
-  
+
       // Kiểm tra và cung cấp ảnh mặc định cho trường anh_danhmuc nếu nó là chuỗi rỗng
       danhMucList = danhMucList.map((item) => ({
         ...item,
         anh_danhmuc: item.anh_danhmuc || "https://iili.io/H6SU9Wb.png",
       }));
-  
+
       this.setState({ danhMucList });
     } catch (error) {
       console.error(error);
@@ -57,24 +68,23 @@ export default class DanhMuc extends Component {
     }
   };
 
-  handleDanhMucPress = (item) => {
-    this.setState({ selectedDanhMuc: item }, () => {
-      this.fetchSanPhamByDanhMuc(item.id_danhmuc);
-    });
-  };
+  handleDanhMucPress = async (item) => {
+    this.setState({ selectedDanhMuc: item, loading: true });
 
-  renderDanhMucItem = ({ item }) => (
-    <TouchableWithoutFeedback onPress={() => this.handleDanhMucPress(item)}>
-      <View style={styles.itemContainer}>
-        <Image source={{ uri: item.anh_danhmuc }} style={styles.img} />
-        <Text style={styles.text}>{item.ten_danhmuc}</Text>
-      </View>
-    </TouchableWithoutFeedback>
-  );
+    try {
+      const response = await axios.get(`${API_LIST_SANPHAM_DANHMUC}/${item.id_danhmuc}`);
+      const data = response.data;
+      this.setState({ danhSachSanPham: data.products });
+    } catch (error) {
+      console.error(error);
+    }
+
+    this.setState({ loading: false });
+  };
 
   handlePress = (dataProd) => {
     this.setState({ selectedDanhMuc: null }, () => {
-      this.props.navigation.navigate('ChiTietSanPham', { data: dataProd });
+      this.props.navigation.navigate("ChiTietSanPham", { data: dataProd });
     });
   };
 
@@ -84,6 +94,26 @@ export default class DanhMuc extends Component {
       this.fetchSanPhamByDanhMuc(selectedDanhMuc.id_danhmuc);
     }
   };
+
+  // Phương thức xử lý sự kiện làm mới
+  onRefresh = () => {
+    const { selectedDanhMuc } = this.state;
+    this.setState({ refreshing: true }, async () => {
+      if (selectedDanhMuc) {
+        await this.fetchSanPhamByDanhMuc(selectedDanhMuc.id_danhmuc);
+      }
+      this.setState({ refreshing: false });
+    });
+  };
+
+  renderDanhMucItem = ({ item }) => (
+    <TouchableWithoutFeedback onPress={() => this.handleDanhMucPress(item)}>
+      <View style={styles.danhMucItemContainer}>
+        <Image source={{ uri: item.anh_danhmuc }} style={styles.danhMucImg} />
+        <Text style={styles.danhMucText}>{item.ten_danhmuc}</Text>
+      </View>
+    </TouchableWithoutFeedback>
+  );
 
   renderSanPhamItem = ({ item, index }) => {
     const isOddItem = index % 2 !== 0;
@@ -103,145 +133,100 @@ export default class DanhMuc extends Component {
     );
   };
 
-  // Phương thức xử lý sự kiện làm mới
-  onRefresh = () => {
-    const { selectedDanhMuc } = this.state;
-    this.setState({ refreshing: true }, async () => {
-      if (selectedDanhMuc) {
-        await this.fetchSanPhamByDanhMuc(selectedDanhMuc.id_danhmuc);
-      }
-      this.setState({ refreshing: false });
-    });
-  };
-
   render() {
-    const { danhMucList, selectedDanhMuc, danhSachSanPham, loading, refreshing } = this.state;
-
-    if (selectedDanhMuc === null) {
-      return (
-        <View style={styles.container}>
-          <FlatList
-            data={danhMucList}
-            renderItem={this.renderDanhMucItem}
-            keyExtractor={(item) => item.id_danhmuc}
-            contentContainerStyle={styles.listContainer}
-            numColumns={2}
-            refreshControl={ // Thêm RefreshControl
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={this.onRefresh}
-                colors={['#9Bd35A', '#689F38']}
-              />
-            }
-          />
-        </View>
-      );
-    }
+    const {
+      danhMucList,
+      selectedDanhMuc,
+      danhSachSanPham,
+      loading,
+      refreshing,
+    } = this.state;
 
     return (
-      <Modal visible={true} animationType="slide">
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>{selectedDanhMuc?.ten_danhmuc}</Text>
-
-          {loading ? (
-            <ActivityIndicator size="large" color="gray" style={styles.loader} />
-          ) : (
-            <FlatList
-              data={danhSachSanPham}
-              renderItem={this.renderSanPhamItem}
-              keyExtractor={(item) => item.idSP}
-              contentContainerStyle={styles.sanPhamListContainer}
-              refreshControl={ // Thêm RefreshControl
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={this.onRefresh}
-                  colors={['#9Bd35A', '#689F38']}
-                />
-              }
-            />
-          )}
-
-          <TouchableWithoutFeedback onPress={() => this.setState({ selectedDanhMuc: null })}>
-            <View style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>Đóng</Text>
-            </View>
-          </TouchableWithoutFeedback>
+      <View style={styles.container}>
+        <View contentContainerStyle={styles.danhMucScrollView} horizontal>
+          <View style={styles.danhMucContainer}>
+            {danhMucList.map((item) => (
+              <TouchableWithoutFeedback
+                key={item.id_danhmuc}
+                onPress={() => this.handleDanhMucPress(item)}
+              >
+                <View style={styles.danhMucItemContainer}>
+                  <Image source={{ uri: item.anh_danhmuc }} style={styles.danhMucImg} />
+                  <Text style={styles.danhMucText}>{item.ten_danhmuc}</Text>
+                </View>
+              </TouchableWithoutFeedback>
+            ))}
+          </View>
         </View>
-      </Modal>
+
+        {selectedDanhMuc && (
+          <View style={styles.wrapper}>
+            {loading ? (
+              <ActivityIndicator size="large" color="gray" style={styles.loader} />
+            ) : (
+              <FlatList
+                data={danhSachSanPham}
+                renderItem={this.renderSanPhamItem}
+                keyExtractor={(item) => item.idSP.toString()}
+                contentContainerStyle={styles.sanPhamListContainer}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={this.onRefresh}
+                    colors={["#9Bd35A", "#689F38"]}
+                  />
+                }
+              />
+            )}
+          </View>
+        )}
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  sanPhamRowContainer: {
-    flexDirection: "row",
-    marginBottom: 10,
-  },
-
   container: {
     flex: 1,
-    paddingTop: 30,
+    paddingTop: 10,
+    paddingHorizontal: 10,
   },
-  listContainer: {
-    justifyContent: "space-between",
-    marginBottom: 30,
-    paddingHorizontal: 25,
-  },
-  itemContainer: {
-    alignItems: "center",
-    marginBottom: 30,
-    flex: 1,
-    justifyContent: "center",
-  },
-  img: {
-    width: 100,
-    height: 100,
-  },
-  text: {
-    marginTop: 10,
-    fontSize: 16,
-    textAlign: "center",
-  },
-  modalContainer: {
-    flex: 1,
-    alignItems: "center",
-    backgroundColor: '#E3E3E3',
-  },
-  modalTitle: {
-    fontSize: 25,
-    fontWeight: "bold",
-    marginBottom: 20,
-    marginTop:10,
-    color:'blue'
-
-  },
-  sanPhamListContainer: {
+  danhMucScrollView: {
     flexGrow: 1,
   },
-  sanPhamItemContainer: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderWidth: 1,
-    borderColor: "gray",
+  danhMucContainer: {
+    flexDirection: "row",
+    paddingRight: 10,
     marginBottom: 10,
   },
-  sanPhamText: {
-    fontSize: 16,
+  danhMucItemContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 10,
+  },
+  danhMucImg: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+  },
+  danhMucText: {
+    marginTop: 5,
+    textAlign: "center",
+  },
+  wrapper: {
+    flex: 1,
+    flexDirection: "column-reverse",
+  },
+  sanPhamListContainer: {
+    paddingBottom: 10,
+  },
+  sanPhamRowContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 10,
   },
   loader: {
-    marginTop: 50,
-  },
-  closeButton: {
     marginTop: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: "orange",
-    borderRadius: 5,
-    marginBottom: 10,
-  },
-  closeButtonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
   },
 });
