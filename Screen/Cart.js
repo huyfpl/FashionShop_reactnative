@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, ScrollView,ToastAndroid } from "react-native";
+import { View, Text, Image, StyleSheet, ScrollView, ToastAndroid } from "react-native";
 import { Button, Checkbox } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_LISTGIOHANG_USER_ID, API_TANG_SOLUONG_GIOHANG, API_GIAM_SOLUONG_GIOHANG } from "../helpers/api";
@@ -12,17 +12,25 @@ export default class Cart extends React.Component {
     danhMuc: {},
     selectedItems: {},
     tongTien: 0,
+    showConfirmation: false,
+    deletingItemId: null,
+    soluong:null
   };
 
   componentDidMount() {
+    const { navigation } = this.props;
+    navigation.setOptions({
+      title: "Giỏ hàng của bạn",
+
+    });
     this.getUserData();
     this.focusListener = this.props.navigation.addListener('focus', () => {
       this.getUserData();
     });
-    
+
   }
   componentWillUnmount() {
-    this.focusListener(); 
+    this.focusListener();
   }
 
   async getUserData() {
@@ -81,6 +89,7 @@ export default class Cart extends React.Component {
     try {
       await axios.post(`${API_TANG_SOLUONG_GIOHANG}/${userId}/${idSP}`);
       this.fetchUserData();
+     
     } catch (error) {
       console.error(error);
     }
@@ -89,13 +98,48 @@ export default class Cart extends React.Component {
   handleDecreaseQuantity = async (idSP, soluong) => {
     const userId = await AsyncStorage.getItem("userId");
     try {
-      await axios.post(`${API_GIAM_SOLUONG_GIOHANG}/${userId}/${idSP}`);
-      this.fetchUserData();
+      if (soluong === 1) {
+        this.setState({
+          showConfirmation: true,
+          deletingItemId: idSP,
+          soluong: soluong
+        });
+      }
+      else if (soluong !=0){
+        await axios.post(`${API_GIAM_SOLUONG_GIOHANG}/${userId}/${idSP}`);
+        this.fetchUserData();
+      }
     } catch (error) {
       console.error(error);
     }
   };
+  showDeleteConfirmation = (idSP) => {
+    this.setState({
+      showConfirmation: true,
+      
+    });
+  };
 
+  hideDeleteConfirmation = () => {
+    this.setState({
+      showConfirmation: false,
+    });
+  };
+
+  handleConfirmDelete = async () => {
+    const userId = await AsyncStorage.getItem("userId");
+    const { deletingItemId } = this.state;
+    
+    try {
+      await axios.post(`${API_GIAM_SOLUONG_GIOHANG}/${userId}/${deletingItemId}`);
+      this.fetchUserData();
+    } catch (error) {
+      console.error(error);
+    }
+    
+    this.hideDeleteConfirmation();
+  };
+  
   handleSelectAll = (categoryName) => {
     this.setState((prevState) => {
       const { selectedItems, danhMuc } = prevState;
@@ -136,13 +180,13 @@ export default class Cart extends React.Component {
   };
 
   handlePayment = (value) => {
-    if(value==0){
+    if (value == 0) {
       console.warn("chưa có đơn hàng nào")
     }
-    else{
-      console.warn("ấy ấy chưa làm")
+    else {
+      console.warn("đang phát triển")
     }
-   
+
   };
 
   render() {
@@ -200,18 +244,34 @@ export default class Cart extends React.Component {
             </View>
           ))}
         </ScrollView>
-
+        {this.state.showConfirmation && (
+          <View style={styles.confirmationContainer}>
+            <Text style={styles.confirmationText}>Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?</Text>
+            <View style={styles.confirmationButtons}>
+              <Button onPress={this.handleConfirmDelete} style={styles.confirmButton}>
+                <Text style={styles.confirmButtonText}>Xác nhận</Text>
+              </Button>
+              <Button onPress={this.hideDeleteConfirmation} style={styles.cancelButton}>
+                <Text style={styles.cancelButtonText}>Hủy bỏ</Text>
+              </Button>
+            </View>
+          </View>
+        )}
         <View style={styles.bottomContainer}>
-          <View style={styles.totalTextContainer}>
-            <Text style={styles.totalText}>Tổng thiệt hại: <Text style={styles.tongtien}>{tongTien}</Text> <Text style={styles.kihieutongtien}>vnđ</Text></Text>
+          <View style={[styles.totalTextContainer, { flex: 1 }]}>
+            <Text style={styles.totalText}>
+              Tổng thiệt hại: <Text style={styles.tongtien}>{tongTien.toFixed(0).slice(0, 5)+"k"}</Text> <Text style={styles.kihieutongtien}>vnđ</Text>
+            </Text>
           </View>
           <Button
-            onPress={()=>this.handlePayment(tongTien)}
+            onPress={() => this.handlePayment(tongTien)}
             style={styles.paymentButton}
           >
             <Text style={styles.paymentButtonText}>Thanh toán</Text>
           </Button>
         </View>
+
+
       </View>
     );
   }
@@ -222,15 +282,16 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     backgroundColor: "#fff",
+    flexDirection: "column-reverse",
   },
   categoryHeader: {
     flexDirection: "row",
     alignItems: "center",
-    
+
     width: "100%",
     backgroundColor: '#E0E0E0',
-   
-    marginTop:10
+
+    marginTop: 10
   },
   categoryTitle: {
     fontSize: 18,
@@ -242,8 +303,8 @@ const styles = StyleSheet.create({
   productItem: {
     flexDirection: "row",
     alignItems: "center",
-    
-    backgroundColor:'#F9F9F9'
+
+    backgroundColor: '#F9F9F9'
   },
   productInfo: {
     flexDirection: "row",
@@ -283,29 +344,44 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#ee4d2d",
 
-    height:20
+    height: 20
   },
-  tongtien:{
-   fontSize:12,
-   color:'#606060',
+  tongtien: {
+    fontSize: 15,
+    color: 'black',
   },
   bottomContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 10,
+
+    position: 'absolute',
+    marginBottom: 70,
+    backgroundColor: '#6699FF',
+    padding: 10,
+    width: "100%",
+    right: 10,
+    borderRadius: 20
   },
   paymentButton: {
     height: 40,
     paddingHorizontal: 20,
-    borderRadius: 5,
-    justifyContent: "center", 
-    alignItems: "center", 
-    backgroundColor:'red'
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: 'red',
+
   },
   paymentButtonText: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#fff",
+
   },
+  confirmationContainer:{
+    fontSize:20
+  },
+  confirmationText:{
+    fontSize:20
+  }
 });

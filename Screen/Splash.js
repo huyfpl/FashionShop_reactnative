@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    
   },
   logoContainer: {
     alignItems: 'center',
@@ -109,8 +109,8 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     flex: 1,
-    resizeMode: 'cover',
-    height: 750,
+    
+    height: "110%",
   },
 });
 

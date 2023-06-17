@@ -18,6 +18,10 @@ export default class User extends React.Component {
   }
 
   componentDidMount() {
+    this.props.navigation.setOptions({
+      title: 'Thông tin của bạn',
+    
+    });
     this.getUserData();
     this.focusListener = this.props.navigation.addListener('focus', () => {
       this.getUserData();
@@ -117,9 +121,20 @@ export default class User extends React.Component {
           </View>
           <View style={styles.inputContainer}>
             <View style={styles.iconContainer}>
-              <Icon name="home" size={25} color="gray" style={styles.icon} />
+              <Icon name="user" size={25} color="gray" style={styles.icon} />
             </View>
             <TouchableOpacity style={[styles.button, { flex: 1 }]} onPress={() => this.handlePressEdit()}>
+              <Text style={styles.buttonText}>Cập nhật lại thông tin</Text>
+            </TouchableOpacity>
+            <View style={styles.iconContainerChevron}>
+              <Icon name="edit" size={25} color="gray" />
+            </View>
+          </View>
+          <View style={styles.inputContainer}>
+            <View style={styles.iconContainer}>
+              <Icon name="home" size={25} color="gray" style={styles.icon} />
+            </View>
+            <TouchableOpacity style={[styles.button, { flex: 1 }]} onPress={() => this.handlePressSetting()}>
               <Text style={styles.buttonText}>Cài đặt</Text>
             </TouchableOpacity>
             <View style={styles.iconContainerChevron}>
@@ -184,7 +199,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'black',
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   logoutButton: {
@@ -204,10 +219,11 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     marginRight: 10,
-    marginTop: 8,
+    marginTop: 10,
   },
   icon: {
     alignSelf: 'center',
+    marginTop: 0,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -216,6 +232,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginRight: 10,
-    marginTop: 6
+    marginTop: 15
   },
 });

@@ -27,12 +27,18 @@ export default class DanhMuc extends Component {
       const response = await axios.get(API_LIST_DANHMUC);
       const data = response.data;
       let danhMucList = data.danhmuc;
-
+  
       // Kiểm tra nếu số lượng danh mục là số lẻ, thêm một phần tử ảo vào danh sách để đảm bảo số lượng chẵn
       if (danhMucList.length % 2 !== 0) {
         danhMucList.push({ id_danhmuc: -1, ten_danhmuc: "", anh_danhmuc: "" });
       }
-
+  
+      // Kiểm tra và cung cấp ảnh mặc định cho trường anh_danhmuc nếu nó là chuỗi rỗng
+      danhMucList = danhMucList.map((item) => ({
+        ...item,
+        anh_danhmuc: item.anh_danhmuc || "https://iili.io/H6SU9Wb.png",
+      }));
+  
       this.setState({ danhMucList });
     } catch (error) {
       console.error(error);
@@ -199,12 +205,15 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: '#E3E3E3',
   },
   modalTitle: {
-    fontSize: 18,
+    fontSize: 25,
     fontWeight: "bold",
     marginBottom: 20,
+    marginTop:10,
+    color:'blue'
+
   },
   sanPhamListContainer: {
     flexGrow: 1,
