@@ -16,8 +16,8 @@ export default class ChiTietSanPham extends React.Component {
         const data = this.props.route.params.data;
         ToastAndroid.show('Đã thêm vào yêu thích ✓', ToastAndroid.SHORT);
     }
-    giohang=()=>{
-       this.props.navigation.navigate('Cart')
+    giohang = () => {
+        this.props.navigation.navigate('Cart')
     }
     componentDidMount() {
         const { navigation, route } = this.props;
@@ -40,13 +40,18 @@ export default class ChiTietSanPham extends React.Component {
         const data = this.props.route.params.data;
         console.log(data.idSP);
         const userId = await AsyncStorage.getItem('userId');
-        console.log(userId);
-        try {
 
-            await axios.post(`${API_ADD_GIOHANG_USER}/${userId}/${data.idSP}`);
-            ToastAndroid.show('Đã thêm vào giỏ hàng ✓', ToastAndroid.SHORT);
-        } catch (error) {
-            ToastAndroid.show('Lỗi bất định !', ToastAndroid.SHORT);
+        console.log(userId);
+        if (!userId) {
+            ToastAndroid.show('bạn chưa đăng nhập!', ToastAndroid.SHORT);
+            this.props.navigation.navigate("Login");
+        } else {
+            try {
+                await axios.post(`${API_ADD_GIOHANG_USER}/${userId}/${data.idSP}`);
+                ToastAndroid.show('Đã thêm vào giỏ hàng ✓', ToastAndroid.SHORT);
+            } catch (error) {
+                ToastAndroid.show('Lỗi bất định!', ToastAndroid.SHORT);
+            }
         }
     }
     render() {
