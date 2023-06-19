@@ -1,7 +1,8 @@
 import React from "react";
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-
+import SanPham from "../Component/SanPham";
+import { API_SEARCH_SANPHAM } from "../helpers/api";
 export default class SearchResults extends React.Component {
   constructor(props) {
     super(props);

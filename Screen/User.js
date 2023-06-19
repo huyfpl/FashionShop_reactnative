@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity ,ToastAndroid} from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_LIST_USER_ID } from "../helpers/api";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -65,13 +65,24 @@ export default class User extends React.Component {
   };
   
   handlePressEdit = () => {
-      this.props.navigation.navigate('EditUser',{data: this.state.user});
+     {this.state.userId?this.props.navigation.navigate('EditUser',{data: this.state.user}):
+     ToastAndroid.show('Tính năng ko khả dụng bạn cần đăng nhập!', ToastAndroid.SHORT);}
+      
   };
-
+  handlePressSetting=() => {
+    {this.state.userId?this.props.navigation.navigate('Setting',{data: this.state.user}):
+     ToastAndroid.show('Tính năng ko khả dụng bạn cần đăng nhập!', ToastAndroid.SHORT);}
+  }
+  MyOrder=()=>{
+    {this.state.userId?this.props.navigation.navigate('MyOrder',{data: this.state.user}):
+     ToastAndroid.show('Tính năng ko khả dụng bạn cần đăng nhập!', ToastAndroid.SHORT);}
+  }
   handlePressCart =()=>{
     this.props.navigation.navigate('Cart');
   }
-
+  Doimatkhau=()=>{
+    this.props.navigation.navigate('DoiMatKhau');
+  }
   render() {
     const { user } = this.state;
     
@@ -97,11 +108,22 @@ export default class User extends React.Component {
         )}
 
         <View style={styles.buttonContainer}>
+        <View style={styles.inputContainer}>
+            <View style={styles.iconContainer}>
+              <Icon name="lock" size={25} color="gray" style={styles.icon1} />
+            </View>
+            <TouchableOpacity style={[styles.button, { flex: 1 }]} onPress={() => this.Doimatkhau()}>
+              <Text style={styles.buttonText}>Đổi mật khẩu</Text>
+            </TouchableOpacity>
+            <View style={styles.iconContainerChevron}>
+              <Icon name="chevron-right" size={25} color="gray" />
+            </View>
+          </View>
           <View style={styles.inputContainer}>
             <View style={styles.iconContainer}>
-              <Icon name="shopping-cart" size={25} color="gray" style={styles.icon} />
+              <Icon name="shopping-cart" size={25} color="gray" style={styles.icon2} />
             </View>
-            <TouchableOpacity style={[styles.button, { flex: 1 }]}>
+            <TouchableOpacity style={[styles.button, { flex: 1 }]} onPress={() => this.MyOrder()}>
               <Text style={styles.buttonText}>Đơn hàng của tôi</Text>
             </TouchableOpacity>
             <View style={styles.iconContainerChevron}>
@@ -110,7 +132,7 @@ export default class User extends React.Component {
           </View>
           <View style={styles.inputContainer}>
             <View style={styles.iconContainer}>
-              <Icon name="gear" size={25} color="gray" style={styles.icon} />
+              <Icon name="gear" size={25} color="gray" style={styles.icon3} />
             </View>
             <TouchableOpacity style={[styles.button, { flex: 1 }]} onPress={() => this.handlePressCart()} >
               <Text style={styles.buttonText}>Giỏ hàng</Text>
@@ -121,7 +143,7 @@ export default class User extends React.Component {
           </View>
           <View style={styles.inputContainer}>
             <View style={styles.iconContainer}>
-              <Icon name="user" size={25} color="gray" style={styles.icon} />
+              <Icon name="user" size={25} color="gray" style={styles.icon4} />
             </View>
             <TouchableOpacity style={[styles.button, { flex: 1 }]} onPress={() => this.handlePressEdit()}>
               <Text style={styles.buttonText}>Cập nhật lại thông tin</Text>
@@ -132,7 +154,7 @@ export default class User extends React.Component {
           </View>
           <View style={styles.inputContainer}>
             <View style={styles.iconContainer}>
-              <Icon name="home" size={25} color="gray" style={styles.icon} />
+              <Icon name="home" size={25} color="gray" style={styles.icon5} />
             </View>
             <TouchableOpacity style={[styles.button, { flex: 1 }]} onPress={() => this.handlePressSetting()}>
               <Text style={styles.buttonText}>Cài đặt</Text>
@@ -143,9 +165,14 @@ export default class User extends React.Component {
           </View>
         </View>
         </View>
-        <TouchableOpacity style={styles.logoutButton} onPress={() => this.handlePressLogin()}>
-          <Text style={styles.logoutButtonText}>Log Out</Text>
-        </TouchableOpacity>
+        {this.state.userId? <TouchableOpacity style={styles.logoutButton} onPress={() => this.handlePressLogin()}>
+          
+          <Text style={styles.logoutButtonText}>Đăng xuất</Text>
+        </TouchableOpacity>:<TouchableOpacity style={styles.loginButton} onPress={() => this.handlePressLogin()}>
+          
+          <Text style={styles.loginButtonText}>Đăng nhập</Text>
+        </TouchableOpacity>}
+       
       </View>
     );
   }
@@ -211,8 +238,23 @@ const styles = StyleSheet.create({
     width: 300,
     height: 50
   },
+  loginButton: {
+    backgroundColor: '#00FF00',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    alignSelf: 'center',
+    width: 300,
+    height: 50
+  },
   logoutButtonText: {
     color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  loginButtonText: {
+    color: '#FFFFFF',
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center'
@@ -234,4 +276,19 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 15
   },
+  icon1:{
+    marginLeft:5
+  },
+  icon2:{
+    marginLeft:2
+  },
+  icon3:{
+    marginLeft:5
+  },
+  icon4:{
+    marginLeft:7
+  },
+  icon5:{
+    marginLeft:5
+  }
 });

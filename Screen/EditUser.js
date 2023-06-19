@@ -13,7 +13,7 @@ export default class EditUser extends React.Component {
       address: '',
       phone: '',
       avatar: '',
-      isChanged: false, // Thêm biến isChanged
+      isChanged: false, 
     };
   }
 

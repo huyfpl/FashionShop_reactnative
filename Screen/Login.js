@@ -37,8 +37,9 @@ export default class LoginScreen extends Component {
 
   handleLogin() {
     const { username, password, userList } = this.state;
-    const user = userList.find((user) => user.tentaikhoan === username && user.pass === password);
-    const usernameExists = userList.some((user) => user.tentaikhoan === username);
+    try {
+      const user = userList.find((user) => user.tentaikhoan === username.trim() && user.pass === password);
+    const usernameExists = userList.some((user) => user.tentaikhoan === username.trim());
     const passwordExists = userList.some((user) => user.pass === password);
 
     if (username.trim().length === 0) {
@@ -62,6 +63,10 @@ export default class LoginScreen extends Component {
         ToastAndroid.show('Chúc mừng bạn đăng nhập thành công ✓', ToastAndroid.SHORT);
       });
     }
+    } catch (error) {
+      ToastAndroid.show('Lỗi Mạng ✓', ToastAndroid.SHORT);
+    }
+    
   }
 
 
@@ -80,7 +85,10 @@ export default class LoginScreen extends Component {
       password: this.state.password + '\n',
     });
   };
-
+  handleHome=() => {
+    this.props.navigation.navigate('Home');
+    ToastAndroid.show('Chúc mừng bạn ✓', ToastAndroid.SHORT);
+  }
   render() {
     const { passwordVisible } = this.state;
 
@@ -141,6 +149,13 @@ export default class LoginScreen extends Component {
               <Text style={styles.buttonText}>Đăng nhập</Text>
             </TouchableOpacity>
           </View>
+        </View>
+        <View>
+        <TouchableOpacity style={styles.buttonHome} onPress={() => this.handleHome()}>
+          {this.state.username.trim().length === 0 ? (
+            <Image style={styles.vaohome} source={{ uri: 'https://iili.io/H6Z39fV.png' }} />
+          ) : null}
+        </TouchableOpacity>
         </View>
       </ImageBackground>
     );
@@ -218,4 +233,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  buttonHome:{
+  
+  },
+  vaohome:{
+    width:55,
+    height:55,
+    position:'absolute',
+    bottom:50,alignSelf:'center'
+  
+  }
 });

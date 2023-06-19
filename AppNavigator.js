@@ -15,12 +15,13 @@ import Register from './Screen/Register';
 import EditUser from './Screen/EditUser';
 import Splash from './Screen/Splash';
 import SearchResults from './Screen/SearchResults';
+import DoiMatKhau from './Screen/DoiMatKhau';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 import * as Animatable from 'react-native-animatable';
 import React, { useRef, useEffect } from 'react';
 import { View, TouchableWithoutFeedback } from 'react-native';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 function TabButton({ onPress, accessibilityState, children }) {
     const viewRef = useRef(null);
 
@@ -77,7 +78,7 @@ function TabNavigator() {
                     tabBarShowLabel: false,
                     title: 'Danh Mục',
                     tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons name="folder" color={color} size={20} />
+                        <Icon name="th-large" size={18} color={color}  />
                     ),
                     tabBarButton: (props) => <TabButton {...props} />
                 }}
@@ -124,6 +125,7 @@ export default function AppNavigator() {
                 <Stack.Screen name="Home" component={TabNavigator} options={{ headerShown: false }} />
                 <Stack.Screen name="ChiTietSanPham" component={ChiTietSanPham} />
                 <Stack.Screen name="SearchResults" component={SearchResults} />
+                <Stack.Screen name="DoiMatKhau" component={DoiMatKhau} />
             </Stack.Navigator>
         </NavigationContainer>
     );
