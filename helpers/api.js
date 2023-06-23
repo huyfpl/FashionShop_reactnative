@@ -1,5 +1,5 @@
 
-export const API_URL='http://192.168.0.104:3000/api'
+export const API_URL='http://192.168.0.105:3000/api'
 
 export const API_LIST_SANPHAM=API_URL+'/listsanpham' // hiện thị list sản phẩm
 export const API_LOGIN=API_URL + '/listuser' // check login

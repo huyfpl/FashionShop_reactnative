@@ -124,9 +124,12 @@ export default class LoginScreen extends Component {
                 placeholder="Password"
                 placeholderTextColor="gray"
                 secureTextEntry={!passwordVisible}
-                returnKeyType="done"
+                returnKeyType="next"
                 ref={(input) => (this.passwordInput = input)}
               />
+                <TouchableOpacity style={styles.button} onPress={() => this.handleLogin()}>
+              <Text style={styles.buttonText}>Đăng nhập</Text>
+            </TouchableOpacity>
               <TouchableOpacity
                 style={styles.iconContainer}
                 onPress={this.togglePasswordVisibility}
@@ -145,9 +148,7 @@ export default class LoginScreen extends Component {
               <Text style={styles.registerText}>Đăng kí</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={() => this.handleLogin()}>
-              <Text style={styles.buttonText}>Đăng nhập</Text>
-            </TouchableOpacity>
+          
           </View>
         </View>
         <View>
@@ -185,6 +186,7 @@ const styles = StyleSheet.create({
   formContainer: {
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     padding: 20,
+    paddingBottom:50,
     borderRadius: 10,
     shadowColor: 'black',
     shadowOpacity: 0.5,
@@ -217,6 +219,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
     marginTop: 15,
+    position:'absolute',
+    top:50,
+    left:100
   },
   buttonText: {
     color: 'white',

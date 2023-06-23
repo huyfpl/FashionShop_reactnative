@@ -98,7 +98,8 @@ export default class User extends React.Component {
                 <Image source={{ uri: item.avatar }} style={styles.avatar} />
                 <View style={styles.userInfo}>
                   <Text style={styles.name}>{item.ten}</Text>
-                  <Text style={styles.username}>{item.tentaikhoan}</Text>
+                  <Image style={styles.veri} source={{uri:"https://iili.io/HPxwArl.png"}}/>
+                  <View style={{marginTop:10}}><Text style={{fontSize:15,fontWeight:"bold"}}>Tên tài khoản: <Text style={styles.username}>{item.tentaikhoan}</Text></Text></View>
                 </View>
               </View>
             ))}
@@ -188,10 +189,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: 'bold',
-    marginBottom: 50,
+    marginBottom: 30,
     marginLeft: 10,
     alignSelf:'center',
-    paddingTop:20
+    paddingTop:20,
+    color:'#3399FF'
+
   },
   avatar: {
     width: 100,
@@ -199,7 +202,8 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginRight: 10,
     borderWidth: 2,
-    borderColor: 'black',
+    borderColor: '#FF3399',
+    paddingHorizontal:10
   },
   userInfo: {
     flex: 1,
@@ -209,8 +213,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   username: {
-    fontSize: 14,
-    color: 'gray',
+    fontSize: 15,
+    color: 'blue',
   },
   buttonContainer: {
     flexDirection: 'column',
@@ -277,10 +281,10 @@ const styles = StyleSheet.create({
     marginTop: 15
   },
   icon1:{
-    marginLeft:5
+    marginLeft:9
   },
   icon2:{
-    marginLeft:2
+    marginLeft:3
   },
   icon3:{
     marginLeft:5
@@ -290,5 +294,12 @@ const styles = StyleSheet.create({
   },
   icon5:{
     marginLeft:5
+  },
+  veri:{
+    width:20,
+    height:20,
+    position:"absolute",
+    left:125,
+    top:2
   }
 });

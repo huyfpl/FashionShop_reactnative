@@ -15,6 +15,7 @@ export default class ListSanPham extends React.Component {
       products: null,
       show: false,
       refreshing: false,
+      checkload:true
     };
     this.getProducts = this.getProducts.bind(this);
     this.renderItems = this.renderItems.bind(this);
