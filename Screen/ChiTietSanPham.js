@@ -69,7 +69,7 @@ export default class ChiTietSanPham extends React.Component {
                     <View style={styles.name_price}>
                         <Text style={styles.name}>{data.tenSP}</Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <Text style={styles.price}>{data.giaBan}</Text>
+                            <Text style={styles.price}>{data.giaBan - (data.giaBan * data.phantramgiamgia / 100)}</Text>
                             <Text style={styles.kihieu}>đ</Text>
                         </View>
 
@@ -77,9 +77,25 @@ export default class ChiTietSanPham extends React.Component {
                     <View style={styles.description}>
                         <Text style={styles.mota} >Mô tả sản phẩm</Text>
                         <View style={styles.descriptionTextContainer}>
-                            <Text style={styles.descriptionText}>fefefdfdfdfffffffffffffffffff fffffffffffffffffffffffffffff fefefefefefefeffefefefefe fefefefefhejfhje j
-                                fefefdfdfdfffffffffffffffffff fffffffffffffffffffffffffffff fefefefefefefeffefefefefe fefefefefhejfhje jfhejfhjehehjehfje jfhejhfjehfej
-                                fefefdfdfdfffffffffffffffffff fffffffffffffffffffffffffffff fefefefefefefeffefefefefe fefefefefhejfhje jfhejfhjehehjehfje jfhejhfjehfejfhejfhjehehjehfje jfhejhfjehfej</Text>
+                            <Text style={styles.descriptionText}>
+                                - Thương hiệu: khác; Độ tuổi áp dụng: 40-49 tuổi; Kích thước: 2XL, 3XL, 4XL, L, XL;
+                                <Text>{"\n"}</Text>
+                                - Mẫu quần áo phụ nữ trung niên và cao tuổi: màu trơn; Phong cách quần áo của phụ nữ trung niên và cao tuổi: đi làm;
+                                <Text>{"\n"}</Text>
+                                - Đi lại: đơn giản; Chiều dài quần: quần âu; phân loại màu: trắng, vàng, đen; dạng kết hợp: một mảnh; số mặt hàng: 931; mùa năm: hè 2022; độ dày: mỏng;
+                                <Text>{"\n"}</Text>
+                                - phiên bản quần áo: rộng rãi; chi tiết kiểu quần áo: túi; Quần chiều dài: quần; Thành phần chất liệu: khác 100%;
+                                <Text>{"\n\n"}</Text>
+                                Xin chào! Chào mừng bạn đến với cửa hàng của chúng tôi. Hy vọng bạn có một mua sắm tốt!
+                                <Text>{"\n"}</Text>
+                                Kính thưa:
+                                <Text>{"\n"}</Text>
+                                1. Tất cả các mặt hàng trong cửa hàng đều có trong kho. Thời gian giao hàng thông thường là 10 ngày.
+                                <Text>{"\n"}</Text>
+                                2. Nhiều sản phẩm mới được cập nhật trong cửa hàng của tôi mỗi ngày. Để giúp bạn nhận được chiết khấu lớn nhất, hãy chú ý theo dõi.
+                                <Text>{"\n"}</Text>
+                                3. Chúng tôi sẽ tiến hành kiểm tra chất lượng nghiêm ngặt về chất lượng của hàng hóa bạn mua. Nếu bạn có bất kỳ vấn đề chất lượng, xin vui lòng sử dụng "trò chuyện" để liên hệ với chúng tôi, chúng tôi sẽ giải quyết tất cả các vấn đề hợp lý cho bạn càng sớm càng tốt. Cảm ơn bạn!
+                            </Text>
                         </View>
                     </View>
                 </ScrollView>
@@ -160,6 +176,8 @@ const styles = StyleSheet.create({
     },
     descriptionText: {
         fontSize: 16,
+        color:"black",
+        fontStyle:"normal"
 
     },
     pay_cart: {

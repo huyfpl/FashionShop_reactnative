@@ -16,6 +16,7 @@ import EditUser from './Screen/EditUser';
 import Splash from './Screen/Splash';
 import SearchResults from './Screen/SearchResults';
 import DoiMatKhau from './Screen/DoiMatKhau';
+import ThanhToan from './Screen/ThanhToan';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 import * as Animatable from 'react-native-animatable';
@@ -53,7 +54,8 @@ function TabNavigator() {
                     bottom: 10,
                     left: 10,
                     right: 10,
-                    borderRadius: 50
+                    borderRadius: 50,
+                   
                 }
             }}
         >
@@ -126,6 +128,7 @@ export default function AppNavigator() {
                 <Stack.Screen name="ChiTietSanPham" component={ChiTietSanPham} />
                 <Stack.Screen name="SearchResults" component={SearchResults} />
                 <Stack.Screen name="DoiMatKhau" component={DoiMatKhau} />
+                <Stack.Screen name="ThanhToan" component={ThanhToan}  />
             </Stack.Navigator>
         </NavigationContainer>
     );
